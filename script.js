@@ -52,20 +52,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 300);
   };
 
-  // Attach event listeners to open buttons
+  // Open Jishad's WhatsApp link directly for all booking/consultation triggers
+  const whatsappUrl = 'https://api.whatsapp.com/send/?phone=919656141881&text&type=phone_number&app_absent=0';
   openModalTriggers.forEach((btn, index) => {
     if (!btn) return;
     
     btn.addEventListener('click', (e) => {
       e.preventDefault();
-      // Pick matching default select option based on button
-      let defaultService = '';
-      if (btn.id === 'heroConsultBtn') {
-        defaultService = 'consultation';
-      } else if (btn.id === 'aboutConnectBtn') {
-        defaultService = 'coaching';
-      }
-      openModal(defaultService);
+      window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
     });
   });
 
@@ -208,4 +202,50 @@ document.addEventListener('DOMContentLoaded', () => {
   };
   
   initCounters();
+
+  // --- Insights Contact Form Submission ---
+  const insightsForm = document.getElementById('insightsContactForm');
+  const contactName = document.getElementById('contactName');
+  const contactEmail = document.getElementById('contactEmail');
+  const contactMessage = document.getElementById('contactMessage');
+  const contactFormInputs = document.getElementById('contactFormInputs');
+  const contactFormSuccess = document.getElementById('contactFormSuccess');
+  const contactSubmitBtn = document.getElementById('contactSubmitBtn');
+
+  if (insightsForm) {
+    insightsForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      let isValid = true;
+      
+      // Simple visual check for empty fields
+      [contactName, contactEmail, contactMessage].forEach(input => {
+        if (!input.value.trim()) {
+          input.style.borderColor = '#e03131';
+          isValid = false;
+        } else {
+          input.style.borderColor = 'transparent';
+        }
+      });
+
+      if (!isValid) return;
+
+      // Show loading state
+      contactSubmitBtn.disabled = true;
+      const btnText = contactSubmitBtn.querySelector('span');
+      if (btnText) btnText.textContent = 'Sending...';
+
+      setTimeout(() => {
+        contactFormInputs.classList.add('hidden');
+        contactFormSuccess.classList.remove('hidden');
+      }, 1200);
+    });
+
+    // Clear red border on input typing
+    [contactName, contactEmail, contactMessage].forEach(input => {
+      input.addEventListener('input', () => {
+        input.style.borderColor = 'transparent';
+      });
+    });
+  }
 });

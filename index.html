@@ -77,6 +77,82 @@
     .social-pill-whatsapp img {
       filter: invert(62%) sepia(98%) saturate(359%) hue-rotate(93deg) brightness(95%) contrast(94%);
     }
+
+    /* Page load entrance animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInRight {
+      from {
+        opacity: 0;
+        transform: translateX(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    .animate-fade-in-up {
+      opacity: 0;
+      animation: fadeInUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .animate-fade-in-right {
+      opacity: 0;
+      animation: fadeInRight 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .animate-fade-in {
+      opacity: 0;
+      animation: fadeIn 0.8s ease-out forwards;
+    }
+
+    .delay-100 {
+      animation-delay: 100ms;
+    }
+    .delay-200 {
+      animation-delay: 200ms;
+    }
+    .delay-300 {
+      animation-delay: 300ms;
+    }
+    .delay-400 {
+      animation-delay: 400ms;
+    }
+
+    /* Infinite horizontal marquee ticker */
+    @keyframes marquee {
+      0% {
+        transform: translateX(0%);
+      }
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+
+    .animate-marquee {
+      display: flex;
+      width: max-content;
+      animation: marquee 20s linear infinite;
+    }
   </style>
 </head>
 
@@ -86,11 +162,11 @@
   <header
     class="h-[80px] w-full sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-black/3 flex items-center max-md:h-[70px] max-sm:h-[65px]">
     <div class="w-full max-w-[1440px] mx-auto px-[50px] flex justify-between items-center max-sm:px-[24px]">
-      <a href="#" class="flex items-center" aria-label="Jishad Musthafa Home">
+      <a href="#" class="flex items-center animate-fade-in" aria-label="Jishad Musthafa Home">
         <img src="img/logo.png" alt="Logo" class="h-[29px] w-auto block">
       </a>
       <button
-        class="inline-flex items-center justify-center font-medium text-[18px] bg-black text-btnText px-[28px] h-[48px] rounded-[12px] transition-all duration-200 ease-smooth hover:bg-neutral-800 hover:-translate-y-[1px] active:translate-y-0 cursor-pointer outline-none"
+        class="inline-flex items-center justify-center font-medium text-[18px] bg-black text-btnText px-[28px] h-[48px] rounded-[12px] transition-all duration-200 ease-smooth hover:bg-neutral-800 hover:-translate-y-[1px] active:translate-y-0 cursor-pointer outline-none animate-fade-in delay-100"
         id="headerBookBtn">
         Book Now
       </button>
@@ -106,18 +182,18 @@
           class="bg-brandYellow flex items-center pl-[70px] pr-[50px] py-[60px] max-md:py-[100px] max-md:px-[60px] max-sm:py-[80px] max-sm:px-[30px]">
           <div class="w-full max-w-[600px] flex flex-col justify-center">
             <h1
-              class="text-[56px] text-black font-medium tracking-[0.01em] leading-[1.12] mb-[24px] max-md:text-[54px] max-sm:text-[40px]">
+              class="text-[56px] text-black font-medium tracking-[0.01em] leading-[1.12] mb-[24px] max-md:text-[54px] max-sm:text-[40px] animate-fade-in-up delay-100">
               Transforming<br>
               Potential<br>
               <span class="italic font-normal tracking-normal inline-block">Into</span> Performance
             </h1>
             <p
-              class="text-[18px] leading-[1.55] text-black max-w-[460px] mb-[40px] font-light tracking-normal max-sm:mb-[36px]">
+              class="text-[18px] leading-[1.55] text-black max-w-[460px] mb-[40px] font-light tracking-normal max-sm:mb-[36px] animate-fade-in-up delay-200">
               Helping individuals and organizations unlock growth through leadership development, training, and
               strategic learning solutions.
             </p>
             <button
-              class="inline-flex items-center justify-center font-medium text-[18px] bg-black text-btnText px-[32px] h-[52px] rounded-[12px] transition-all duration-200 ease-smooth hover:bg-neutral-800 hover:-translate-y-[1px] active:translate-y-0 cursor-pointer outline-none gap-[12px] w-fit"
+              class="inline-flex items-center justify-center font-medium text-[18px] bg-black text-btnText px-[32px] h-[52px] rounded-[12px] transition-all duration-200 ease-smooth hover:bg-neutral-800 hover:-translate-y-[1px] active:translate-y-0 cursor-pointer outline-none gap-[12px] w-fit animate-fade-in-up delay-300"
               id="heroConsultBtn">
               <span>Book a Consultation</span>
               <span class="w-[1.5px] h-[18px] bg-btnText/35 mx-[4px] inline-block"></span>
@@ -132,7 +208,7 @@
           </div>
         </div>
         <!-- Right Meeting Image Block -->
-        <div class="relative overflow-hidden h-full max-md:h-[500px] max-sm:h-[350px]">
+        <div class="relative overflow-hidden h-full max-md:h-[500px] max-sm:h-[350px] animate-fade-in-right delay-200">
           <img src="img/meeting.jpg" alt="Team meeting and professional collaboration"
             class="w-full h-full object-cover block">
         </div>
@@ -184,12 +260,12 @@
 
             <!-- Social Pills Row -->
             <div class="flex gap-[16px] flex-wrap max-md:justify-center">
-              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer"
+              <a href="https://www.linkedin.com/in/jishad-musthafa-9024a9407?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" rel="noopener noreferrer"
                 class="social-pill-linkedin inline-flex items-center bg-white border border-[#0a66c2] text-black pl-[8px] pr-[20px] rounded-full font-medium text-[16px] gap-[8px] transition-all duration-200 ease-smooth hover:bg-sky-50/50 hover:-translate-y-[0.5px] h-[40px]">
                 <img src="img/linkedin.png" alt="LinkedIn logo" class="w-[24px] h-[24px] object-contain rounded-full">
                 <span>LinkedIn</span>
               </a>
-              <a href="https://wa.me/" target="_blank" rel="noopener noreferrer"
+              <a href="https://api.whatsapp.com/send/?phone=919656141881&text&type=phone_number&app_absent=0" target="_blank" rel="noopener noreferrer"
                 class="social-pill-whatsapp inline-flex items-center bg-white border border-[#25d366] text-black pl-[8px] pr-[20px] rounded-full font-medium text-[16px] gap-[8px] transition-all duration-200 ease-smooth hover:bg-green-50/50 hover:-translate-y-[0.5px] h-[40px]">
                 <img src="img/whatsapp.png" alt="WhatsApp logo" class="w-[24px] h-[24px] object-contain rounded-full">
                 <span>Whatsapp</span>
@@ -449,7 +525,381 @@
         </div>
       </div>
     </section>
+
+    <!-- Focus Blocks Section -->
+    <section class="w-full max-w-[1340px] mx-auto py-[24px] px-[24px] max-sm:px-[16px]">
+      <div class="grid grid-cols-2 gap-[28px] max-md:grid-cols-1 max-md:gap-[20px]">
+        <!-- Block 1: Unlocking potential -->
+        <div class="bg-white border border-black rounded-[20px] py-[16px] pl-[16px] pr-[48px] flex items-center gap-[24px] relative overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.02)] max-sm:flex-col max-sm:items-start max-sm:p-[16px] max-sm:pr-[36px] max-sm:gap-[16px]">
+          <div class="w-[110px] h-[120px] rounded-[12px] overflow-hidden flex-shrink-0 border border-black/5 max-sm:w-full max-sm:h-[180px]">
+            <img src="img/leadership.jpg" alt="Unlocking potential speaking photo" class="w-full h-full object-cover">
+          </div>
+          <div class="flex-1 flex flex-col justify-center text-left w-full">
+            <h3 class="text-[22px] font-medium text-black leading-tight mb-[8px] font-sans">
+              Unlocking potential.
+            </h3>
+            <p class="text-[15px] font-normal text-[#7C7C7C] leading-snug font-sans">
+              Empowering professionals and students with the critical tools and mindsets needed for personal growth, self-mastery, and long-term career success.
+            </p>
+          </div>
+          <!-- Far Right Yellow Accent Bar -->
+          <div class="absolute right-[24px] top-1/2 -translate-y-1/2 w-[6px] h-[64px] bg-[#FFC20D] rounded-full max-sm:right-[16px] max-sm:h-[48px]"></div>
+        </div>
+
+        <!-- Block 2: Future ready leaders -->
+        <div class="bg-white border border-black rounded-[20px] py-[16px] pl-[16px] pr-[48px] flex items-center gap-[24px] relative overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.02)] max-sm:flex-col max-sm:items-start max-sm:p-[16px] max-sm:pr-[36px] max-sm:gap-[16px]">
+          <div class="w-[110px] h-[120px] rounded-[12px] overflow-hidden flex-shrink-0 border border-black/5 max-sm:w-full max-sm:h-[180px]">
+            <img src="img/training.jpg" alt="Future ready leaders speaking photo" class="w-full h-full object-cover">
+          </div>
+          <div class="flex-1 flex flex-col justify-center text-left w-full">
+            <h3 class="text-[22px] font-medium text-black leading-tight mb-[8px] font-sans">
+              Future ready leaders.
+            </h3>
+            <p class="text-[15px] font-normal text-[#7C7C7C] leading-snug font-sans">
+              Nurturing the next generation of visionary leaders by equipping youth and young professionals with actionable leadership skills, confidence, and modern capabilities.
+            </p>
+          </div>
+          <!-- Far Right Blue Accent Bar -->
+          <div class="absolute right-[24px] top-1/2 -translate-y-1/2 w-[6px] h-[64px] bg-[#228be6] rounded-full max-sm:right-[16px] max-sm:h-[48px]"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Scrolling Marquee Ticker Section -->
+    <div class="w-full bg-[#f0fdfa] py-[16px] overflow-hidden flex items-center select-none mt-[40px] border-t border-b border-[#14b8a6]/20">
+      <div class="animate-marquee flex items-center whitespace-nowrap gap-[16px] text-[#14b8a6] text-[20px] font-semibold tracking-widest uppercase font-sans">
+        <!-- Loop 1 -->
+        <span>Propogation</span>
+        <img src="img/greenSTar.png" alt="Star" class="w-[18px] h-[18px] object-contain flex-shrink-0">
+        <span>Unity</span>
+        <img src="img/greenSTar.png" alt="Star" class="w-[18px] h-[18px] object-contain flex-shrink-0">
+        <span>Excellence</span>
+        <img src="img/greenSTar.png" alt="Star" class="w-[18px] h-[18px] object-contain flex-shrink-0">
+        <span>Service</span>
+        <img src="img/greenSTar.png" alt="Star" class="w-[18px] h-[18px] object-contain flex-shrink-0">
+        <span>Education</span>
+        <img src="img/greenSTar.png" alt="Star" class="w-[18px] h-[18px] object-contain flex-shrink-0">
+        <span>Propogation</span>
+        <img src="img/greenSTar.png" alt="Star" class="w-[18px] h-[18px] object-contain flex-shrink-0">
+        <span>Unity</span>
+        <img src="img/greenSTar.png" alt="Star" class="w-[18px] h-[18px] object-contain flex-shrink-0">
+        <span>Excellence</span>
+        <img src="img/greenSTar.png" alt="Star" class="w-[18px] h-[18px] object-contain flex-shrink-0">
+        <span>Service</span>
+        <img src="img/greenSTar.png" alt="Star" class="w-[18px] h-[18px] object-contain flex-shrink-0">
+        <span>Education</span>
+        <img src="img/greenSTar.png" alt="Star" class="w-[18px] h-[18px] object-contain flex-shrink-0">
+
+        <!-- Loop 2 (Duplicate for seamless loop) -->
+        <span>Propogation</span>
+        <img src="img/greenSTar.png" alt="Star" class="w-[18px] h-[18px] object-contain flex-shrink-0">
+        <span>Unity</span>
+        <img src="img/greenSTar.png" alt="Star" class="w-[18px] h-[18px] object-contain flex-shrink-0">
+        <span>Excellence</span>
+        <img src="img/greenSTar.png" alt="Star" class="w-[18px] h-[18px] object-contain flex-shrink-0">
+        <span>Service</span>
+        <img src="img/greenSTar.png" alt="Star" class="w-[18px] h-[18px] object-contain flex-shrink-0">
+        <span>Education</span>
+        <img src="img/greenSTar.png" alt="Star" class="w-[18px] h-[18px] object-contain flex-shrink-0">
+        <span>Propogation</span>
+        <img src="img/greenSTar.png" alt="Star" class="w-[18px] h-[18px] object-contain flex-shrink-0">
+        <span>Unity</span>
+        <img src="img/greenSTar.png" alt="Star" class="w-[18px] h-[18px] object-contain flex-shrink-0">
+        <span>Excellence</span>
+        <img src="img/greenSTar.png" alt="Star" class="w-[18px] h-[18px] object-contain flex-shrink-0">
+        <span>Service</span>
+        <img src="img/greenSTar.png" alt="Star" class="w-[18px] h-[18px] object-contain flex-shrink-0">
+        <span>Education</span>
+        <img src="img/greenSTar.png" alt="Star" class="w-[18px] h-[18px] object-contain flex-shrink-0">
+      </div>
+    </div>
+
+    <!-- Topics & Available For Section -->
+    <section class="w-full max-w-[1200px] mx-auto py-[40px] px-[24px] max-sm:py-[24px] max-sm:px-[16px] mt-[10px]">
+      <div class="grid grid-cols-[1fr_1.2fr] gap-[60px] items-center max-md:grid-cols-1 max-md:gap-[40px]">
+        <!-- Left Side: Header info -->
+        <div class="text-left">
+          <span class="text-[20px] text-[#7C7C7C] font-normal tracking-tight font-sans block mb-[12px]">Available for</span>
+          <h2 class="text-[44px] font-medium text-black leading-[1.15] tracking-[-0.02em] max-sm:text-[32px] font-sans">
+            Keynotes, Workshops & Conferences
+          </h2>
+        </div>
+
+        <!-- Right Side: Topics container -->
+        <div class="bg-white border-2 border-[#228be6] rounded-[24px] p-[24px] max-sm:p-[16px] shadow-[0_8px_24px_rgba(34,139,230,0.04)]">
+          <div class="flex items-center gap-[8px] mb-[16px]">
+            <!-- Star in Circle Icon -->
+            <div class="w-[28px] h-[28px] rounded-full bg-[#e0f2fe] flex items-center justify-center flex-shrink-0">
+              <img src="img/greenSTar.png" alt="Topics Icon" class="w-[14px] h-[14px] object-contain">
+            </div>
+            <span class="text-[18px] font-medium text-black font-sans">Topics</span>
+          </div>
+          <!-- Word cloud container -->
+          <div class="flex flex-wrap gap-x-[24px] gap-y-[12px] items-baseline font-sans">
+            <span class="text-[32px] font-medium text-[#e69100] tracking-tight leading-none max-sm:text-[24px]">Leadership</span>
+            <span class="text-[32px] font-medium text-[#14b8a6] tracking-tight leading-none max-sm:text-[24px]">Communication</span>
+            <span class="text-[32px] font-medium text-[#228be6] tracking-tight leading-none max-sm:text-[24px]">Growth</span>
+            <span class="text-[32px] font-medium text-[#ff5b60] tracking-tight leading-none max-sm:text-[24px]">Teamwork</span>
+            <span class="text-[32px] font-medium text-black tracking-tight leading-none max-sm:text-[24px]">Organizational Success</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Three-color Progress Divider -->
+    <div class="flex justify-center items-center gap-[12px] py-[24px] select-none">
+      <div class="w-[72px] h-[6px] bg-[#e69100] rounded-full"></div>
+      <div class="w-[72px] h-[6px] bg-[#14b8a6] rounded-full"></div>
+      <div class="w-[72px] h-[6px] bg-[#228be6] rounded-full"></div>
+    </div>
+
+    <!-- Alternating Impact Features Section -->
+    <section class="w-full max-w-[1200px] mx-auto py-[30px] px-[24px] max-sm:py-[20px] max-sm:px-[16px] flex flex-col gap-[48px] max-md:gap-[32px]">
+      
+      <!-- Row 1: High performance teams (Image Left, Text Right) -->
+      <div class="grid grid-cols-[1fr_1.3fr] gap-[40px] items-center max-md:grid-cols-1 max-md:gap-[20px]">
+        <!-- Image -->
+        <div class="rounded-[32px] border-2 border-[#e69100]/20 overflow-hidden aspect-[1.5] w-full shadow-[0_8px_24px_rgba(230,145,0,0.03)]">
+          <img src="img/perfomanceteam.jpg" alt="High performance teams" class="w-full h-full object-cover">
+        </div>
+        <!-- Text -->
+        <div class="text-left font-sans">
+          <h3 class="text-[36px] font-semibold text-[#e69100] tracking-tight leading-tight mb-[12px] max-sm:text-[28px]">
+            High performance teams.
+          </h3>
+          <p class="text-[22px] font-light text-black/75 leading-[1.35] tracking-tight max-sm:text-[18px]">
+            Build collaboration, trust, and results across organizations
+          </p>
+        </div>
+      </div>
+
+      <!-- Row 2: Lead with impact (Text Left, Image Right / Image on top on Mobile) -->
+      <div class="grid grid-cols-[1.3fr_1fr] gap-[40px] items-center max-md:grid-cols-1 max-md:gap-[20px]">
+        <!-- Text (order-2 on mobile for natural reading order after image) -->
+        <div class="text-left font-sans max-md:order-2">
+          <h3 class="text-[36px] font-semibold text-[#14b8a6] tracking-tight leading-tight mb-[12px] max-sm:text-[28px]">
+            Lead with impact.
+          </h3>
+          <p class="text-[22px] font-light text-black/75 leading-[1.35] tracking-tight max-sm:text-[18px]">
+            Leadership and communication mastery for executives.
+          </p>
+        </div>
+        <!-- Image (order-1 on mobile) -->
+        <div class="rounded-[32px] border-2 border-[#14b8a6]/20 overflow-hidden aspect-[1.5] w-full shadow-[0_8px_24px_rgba(20,184,166,0.03)] max-md:order-1">
+          <img src="img/leadImpact.jpg" alt="Lead with impact" class="w-full h-full object-cover">
+        </div>
+      </div>
+
+      <!-- Row 3: Lifeskill readiness (Image Left, Text Right) -->
+      <div class="grid grid-cols-[1fr_1.3fr] gap-[40px] items-center max-md:grid-cols-1 max-md:gap-[20px]">
+        <!-- Image -->
+        <div class="rounded-[32px] border-2 border-[#228be6]/20 overflow-hidden aspect-[1.5] w-full shadow-[0_8px_24px_rgba(34,139,230,0.03)]">
+          <img src="img/lifeSkill.jpg" alt="Lifeskill readiness" class="w-full h-full object-cover">
+        </div>
+        <!-- Text -->
+        <div class="text-left font-sans">
+          <h3 class="text-[36px] font-semibold text-[#228be6] tracking-tight leading-tight mb-[12px] max-sm:text-[28px]">
+            Lifeskill readiness.
+          </h3>
+          <p class="text-[22px] font-light text-black/75 leading-[1.35] tracking-tight max-sm:text-[18px]">
+            Equipping professionals and students for success.
+          </p>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Insights & Reflections Section -->
+    <section class="w-full bg-[#E7F5FF] py-[40px] px-[24px] max-sm:py-[28px] max-sm:px-[16px] text-center border-t border-[#228be6]/10 mt-[20px]">
+      <div class="max-w-[800px] mx-auto flex flex-col items-center justify-center font-sans">
+        <h2 class="text-[36px] font-semibold text-[#228be6] leading-[1.2] tracking-[-0.02em] mb-[16px] max-sm:text-[28px]">
+          Insights, Ideas &<br class="hidden max-sm:block"> Professional Reflections
+        </h2>
+        <p class="text-[20px] font-normal text-black/60 leading-normal max-sm:text-[16px]">
+          Latest thoughts and articles from 
+          <a href="https://www.linkedin.com/in/jishad-musthafa-9024a9407?utm_source=share_via&utm_content=profile&utm_medium=member_android" 
+             target="_blank" 
+             rel="noopener noreferrer" 
+             class="font-medium text-[#228be6] border-b border-[#228be6]/30 hover:border-[#228be6] transition-colors pb-[1px]">
+            LinkedIn
+          </a>.
+        </p>
+      </div>
+    </section>
+
+    <!-- Message / Contact Form Section -->
+    <section class="w-full bg-white py-[50px] px-[24px] max-sm:py-[36px] max-sm:px-[16px] flex flex-col items-center justify-center border-b border-[#e69100]/10">
+      <!-- Contact Form Container -->
+      <div class="w-full max-w-[600px] text-left bg-[#fffbeb] rounded-[32px] p-[40px] max-sm:p-[24px] shadow-[0_12px_36px_rgba(230,145,0,0.07)] border border-[#e69100]/20">
+        <form id="insightsContactForm" class="flex flex-col" novalidate>
+          <!-- Form State: Inputs -->
+          <div id="contactFormInputs">
+            <div class="grid grid-cols-2 gap-[20px] mb-[20px] max-sm:grid-cols-1 max-sm:gap-[16px]">
+              <!-- Name Input -->
+              <div class="flex flex-col">
+                <label for="contactName" class="text-[14px] font-semibold text-black/55 mb-[8px] font-sans">Name</label>
+                <input 
+                  type="text" 
+                  id="contactName" 
+                  placeholder="Enter Your Name Here" 
+                  class="font-sans text-[15px] px-[20px] py-[13px] bg-white border border-transparent rounded-[28px] outline-none text-black transition-all focus:border-[#228be6] focus:shadow-[0_0_0_3px_rgba(34,139,230,0.08)] placeholder:text-black/35"
+                  required>
+              </div>
+              <!-- Email Input -->
+              <div class="flex flex-col">
+                <label for="contactEmail" class="text-[14px] font-semibold text-black/55 mb-[8px] font-sans">Email</label>
+                <input 
+                  type="email" 
+                  id="contactEmail" 
+                  placeholder="Enter your email" 
+                  class="font-sans text-[15px] px-[20px] py-[13px] bg-white border border-transparent rounded-[28px] outline-none text-black transition-all focus:border-[#228be6] focus:shadow-[0_0_0_3px_rgba(34,139,230,0.08)] placeholder:text-black/35"
+                  required>
+              </div>
+            </div>
+
+            <!-- Message Input -->
+            <div class="flex flex-col mb-[24px]">
+              <label for="contactMessage" class="text-[14px] font-semibold text-black/55 mb-[8px] font-sans">Message</label>
+              <textarea 
+                id="contactMessage" 
+                rows="4" 
+                placeholder="Type Your Message" 
+                class="font-sans text-[15px] px-[20px] py-[16px] bg-white border border-transparent rounded-[24px] outline-none text-black resize-none transition-all focus:border-[#228be6] focus:shadow-[0_0_0_3px_rgba(34,139,230,0.08)] placeholder:text-black/35"
+                required></textarea>
+            </div>
+
+            <!-- Action Bar (Socials + Send Button) -->
+            <div class="flex items-center justify-between gap-[20px] flex-wrap">
+              <!-- Left: Social Links -->
+              <div class="flex items-center gap-[12px]">
+                <span class="text-[15px] font-medium text-black/50 font-sans">Contact via</span>
+                <div class="flex items-center gap-[8px]">
+                  <!-- WhatsApp -->
+                  <a href="https://api.whatsapp.com/send/?phone=919656141881&text&type=phone_number&app_absent=0" target="_blank" rel="noopener noreferrer" 
+                     class="w-[36px] h-[36px] rounded-full bg-[#25d366]/10 text-[#25d366] flex items-center justify-center hover:bg-[#25d366]/20 transition-colors"
+                     aria-label="WhatsApp">
+                    <svg class="w-[18px] h-[18px] fill-current" viewBox="0 0 24 24">
+                      <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.457L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.625 1.451 5.403.002 9.803-4.394 9.806-9.799.002-2.618-1.01-5.078-2.854-6.924C16.379 2.036 13.924 1.02 11.312 1.02 5.91 1.02 1.511 5.417 1.508 10.823c-.001 1.51.397 2.986 1.15 4.3l-.36 1.32-.93 3.4 3.49-.915.93-.25zm12.91-6.16c-.31-.15-1.834-.905-2.119-1.01-.285-.104-.492-.154-.7.155-.207.31-.8 1.01-.98 1.216-.18.207-.36.233-.67.083-.31-.15-1.31-.483-2.496-1.54-1.22-1.09-2.046-2.44-2.285-2.855-.24-.41-.025-.63.18-.834.186-.18.412-.48.62-.72.207-.24.275-.41.413-.685.138-.275.068-.517-.035-.724-.103-.207-.8-1.925-1.097-2.643-.29-.697-.585-.602-.8-.602-.207-.005-.445-.005-.68-.005-.24 0-.63.09-1.07.57-.44.48-1.68 1.64-1.68 4.01 0 2.37 1.725 4.66 1.965 4.97.24.31 3.4 5.2 8.225 7.28.98.42 1.94.675 2.6.88.99.31 1.894.266 2.61.16.8-.12 2.447-.998 2.79-1.958.344-.96.344-1.787.242-1.958-.1-.17-.38-.275-.69-.425z"/>
+                    </svg>
+                  </a>
+                  <!-- LinkedIn -->
+                  <a href="https://www.linkedin.com/in/jishad-musthafa-9024a9407?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" rel="noopener noreferrer" 
+                     class="w-[36px] h-[36px] rounded-full bg-[#0077b5]/10 text-[#0077b5] flex items-center justify-center hover:bg-[#0077b5]/20 transition-colors"
+                     aria-label="LinkedIn">
+                    <svg class="w-[18px] h-[18px] fill-current" viewBox="0 0 24 24">
+                      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                    </svg>
+                  </a>
+                  <!-- Email -->
+                  <a href="mailto:jishadmusthafa@gmail.com" 
+                     class="w-[36px] h-[36px] rounded-full bg-[#e69100]/10 text-[#e69100] flex items-center justify-center hover:bg-[#e69100]/20 transition-colors"
+                     aria-label="Email">
+                    <svg class="w-[18px] h-[18px] fill-none stroke-current stroke-[2]" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                      <polyline points="22,6 12,13 2,6"/>
+                    </svg>
+                  </a>
+                </div>
+              </div>
+
+              <!-- Right: Send Button -->
+              <button 
+                type="submit" 
+                id="contactSubmitBtn" 
+                class="inline-flex items-center gap-[10px] bg-[#e69100] text-white hover:bg-neutral-800 transition-all font-medium text-[16px] px-[32px] py-[13px] rounded-full cursor-pointer shadow-md shadow-black/5 border border-[#e69100]/25 outline-none group">
+                <!-- Paper Plane Icon -->
+                <svg class="w-[18px] h-[18px] stroke-current fill-none stroke-[2] transition-transform duration-200 group-hover:translate-x-[2px] group-hover:-translate-y-[2px]" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="22" y1="2" x2="11" y2="13"></line>
+                  <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+                <span>Send</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Form State: Success -->
+          <div id="contactFormSuccess" class="hidden text-center py-[20px] font-sans">
+            <div class="w-[56px] h-[56px] rounded-full bg-[#12b886]/10 text-[#12b886] flex items-center justify-center mx-auto mb-[16px]">
+              <svg class="w-[28px] h-[28px]" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
+              </svg>
+            </div>
+            <h4 class="text-[20px] font-semibold text-black mb-[4px]">Message Sent!</h4>
+            <p class="text-[15px] text-black/60">Thank you. Jishad will get back to you shortly.</p>
+          </div>
+        </form>
+      </div>
+    </section>
   </main>
+
+  <!-- Footer Section -->
+  <footer class="w-full bg-[#14b8a6] text-white">
+    <div class="max-w-[1440px] mx-auto py-[80px] px-[50px] max-sm:py-[60px] max-sm:px-[24px]">
+      <div class="grid grid-cols-[1.2fr_2fr] gap-[80px] max-md:grid-cols-1 max-md:gap-[48px]">
+        
+        <!-- Left Side: Brand & Email -->
+        <div class="flex flex-col items-start text-left">
+          <!-- White Logo (Emblem) -->
+          <img src="img/logo-w.png" alt="Emblem" class="h-[28px] w-auto block mb-[20px] max-sm:h-[22px]">
+          
+          <!-- Name -->
+          <h2 class="text-[44px] font-medium tracking-[-0.02em] leading-[1.1] mb-[16px] font-sans max-sm:text-[34px]">
+            Jishad Musthafa
+          </h2>
+          
+          <!-- Email Link -->
+          <a href="mailto:jishadmusthafa@gmail.com" class="text-[20px] font-normal opacity-90 hover:opacity-100 transition-opacity font-sans max-sm:text-[18px] flex items-center gap-[8px]">
+            <img src="img/@at.png" alt="At symbol" class="w-[20px] h-[20px] object-contain flex-shrink-0">
+            <span>jishadmusthafa@gmail.com</span>
+          </a>
+        </div>
+
+        <!-- Right Side: Links Grid -->
+        <div class="grid grid-cols-4 gap-[40px] max-md:gap-[32px] max-sm:grid-cols-2 max-sm:gap-y-[32px]">
+          <!-- Programs -->
+          <div class="flex flex-col text-left">
+            <h4 class="text-[18px] font-semibold mb-[20px] tracking-wide font-sans">Programs</h4>
+            <div class="flex flex-col gap-[12px] text-[15px] font-normal opacity-85 font-sans">
+              <a href="#" class="hover:opacity-100 transition-opacity">Corporate</a>
+              <a href="#" class="hover:opacity-100 transition-opacity">Individuals</a>
+              <a href="#" class="hover:opacity-100 transition-opacity">Education</a>
+            </div>
+          </div>
+
+          <!-- Expertise -->
+          <div class="flex flex-col text-left">
+            <h4 class="text-[18px] font-semibold mb-[20px] tracking-wide font-sans">Expertise</h4>
+            <div class="flex flex-col gap-[12px] text-[15px] font-normal opacity-85 font-sans">
+              <a href="#" class="hover:opacity-100 transition-opacity">Leadership</a>
+              <a href="#" class="hover:opacity-100 transition-opacity">Coaching</a>
+              <a href="#" class="hover:opacity-100 transition-opacity">Development</a>
+            </div>
+          </div>
+
+          <!-- Contact -->
+          <div class="flex flex-col text-left">
+            <h4 class="text-[18px] font-semibold mb-[20px] tracking-wide font-sans">Contact</h4>
+            <div class="flex flex-col gap-[12px] text-[15px] font-normal opacity-85 font-sans">
+              <a href="mailto:jishadmusthafa@gmail.com" class="hover:opacity-100 transition-opacity">Email</a>
+              <a href="https://api.whatsapp.com/send/?phone=919656141881&text&type=phone_number&app_absent=0" target="_blank" rel="noopener noreferrer" class="hover:opacity-100 transition-opacity">WhatsApp</a>
+              <a href="https://www.linkedin.com/in/jishad-musthafa-9024a9407?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" rel="noopener noreferrer" class="hover:opacity-100 transition-opacity">LinkedIn</a>
+            </div>
+          </div>
+
+          <!-- Location -->
+          <div class="flex flex-col text-left">
+            <h4 class="text-[18px] font-semibold mb-[20px] tracking-wide font-sans">Location</h4>
+            <div class="flex flex-col gap-[12px] text-[15px] font-normal opacity-85 font-sans">
+              <span>Saudi Arabia</span>
+              <span>Riyadh</span>
+              <span>Global</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </footer>
 
   <!-- Interactive Booking/Contact Modal -->
   <div
