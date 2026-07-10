@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jishad Musthafa | Transformational Coach & Trainer</title>
+  <meta name="description"
+    content="Helping individuals and organizations unlock growth through leadership development, corporate training, and strategic learning solutions. Book a consultation with Jishad Musthafa.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+    rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-grotesk@200,300,400,500,600,700&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Clash Grotesk"', 'ClashGrostrek', 'Inter', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'sans-serif'],
+          },
+          colors: {
+            brandYellow: '#FFC20D',
+            btnText: '#FFECA1',
+          },
+          transitionTimingFunction: {
+            smooth: 'cubic-bezier(0.2, 0.8, 0.2, 1)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom non-utility animations & transitions */
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-overlay.active .modal-card {
+      transform: translateY(0) scale(1);
+    }
+
+    .checkmark-circle {
+      stroke-dasharray: 166;
+      stroke-dashoffset: 166;
+      stroke-width: 2;
+      stroke-miterlimit: 10;
+      stroke: #2b8a3e;
+      fill: none;
+      animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+    }
+
+    .checkmark-check {
+      transform-origin: 50% 50%;
+      stroke-dasharray: 48;
+      stroke-dashoffset: 48;
+      animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.6s forwards;
+    }
+
+    @keyframes stroke {
+      100% {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    /* Grayscale logo coloring filters to match mockup brand colors */
+    .social-pill-linkedin img {
+      filter: invert(33%) sepia(85%) saturate(1763%) hue-rotate(189deg) brightness(91%) contrast(92%);
+    }
+
+    .social-pill-whatsapp img {
+      filter: invert(62%) sepia(98%) saturate(359%) hue-rotate(93deg) brightness(95%) contrast(94%);
+    }
+  </style>
+</head>
+
+<body class="bg-white text-black font-sans antialiased overflow-x-hidden leading-[1.4]">
+
+  <!-- Navigation Header -->
+  <header
+    class="h-[130px] w-full sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-black/3 flex items-center max-md:h-[90px] max-sm:h-[80px]">
+    <div class="w-full max-w-[1440px] mx-auto px-[50px] flex justify-between items-center max-sm:px-[24px]">
+      <a href="#" class="flex items-center" aria-label="Jishad Musthafa Home">
+        <img src="img/logo.png" alt="Logo" class="h-[29px] w-auto block">
+      </a>
+      <button
+        class="inline-flex items-center justify-center font-medium text-[18px] bg-black text-btnText px-[28px] h-[48px] rounded-[12px] transition-all duration-200 ease-smooth hover:bg-neutral-800 hover:-translate-y-[1px] active:translate-y-0 cursor-pointer outline-none"
+        id="headerBookBtn">
+        Book Now
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="w-full overflow-hidden">
+      <div class="grid grid-cols-[690fr_750fr] h-[580px] max-md:grid-cols-1 max-md:h-auto">
+        <!-- Left Yellow Block -->
+        <div
+          class="bg-brandYellow flex items-center pl-[70px] pr-[50px] py-[60px] max-md:py-[100px] max-md:px-[60px] max-sm:py-[80px] max-sm:px-[30px]">
+          <div class="w-full max-w-[600px] flex flex-col justify-center">
+            <h1
+              class="text-[56px] text-black font-medium tracking-[0.01em] leading-[1.12] mb-[24px] max-md:text-[54px] max-sm:text-[40px]">
+              Transforming<br>
+              Potential<br>
+              <span class="italic font-normal tracking-normal inline-block">Into</span> Performance
+            </h1>
+            <p
+              class="text-[18px] leading-[1.55] text-black max-w-[460px] mb-[40px] font-light tracking-normal max-sm:mb-[36px]">
+              Helping individuals and organizations unlock growth through leadership development, training, and
+              strategic learning solutions.
+            </p>
+            <button
+              class="inline-flex items-center justify-center font-medium text-[18px] bg-black text-btnText px-[32px] h-[52px] rounded-[12px] transition-all duration-200 ease-smooth hover:bg-neutral-800 hover:-translate-y-[1px] active:translate-y-0 cursor-pointer outline-none gap-[12px] w-fit"
+              id="heroConsultBtn">
+              <span>Book a Consultation</span>
+              <span class="w-[1.5px] h-[18px] bg-btnText/35 mx-[4px] inline-block"></span>
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" class="w-[18px] h-[18px] flex-shrink-0">
+                <line x1="9" y1="2" x2="9" y2="7" />
+                <line x1="9" y1="11" x2="9" y2="16" />
+                <line x1="2" y1="9" x2="7" y2="9" />
+                <line x1="11" y1="9" x2="16" y2="9" />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <!-- Right Meeting Image Block -->
+        <div class="relative overflow-hidden h-full max-md:h-[500px] max-sm:h-[350px]">
+          <img src="img/meeting.jpg" alt="Team meeting and professional collaboration"
+            class="w-full h-full object-cover block">
+        </div>
+      </div>
+    </section>
+
+    <!-- About Me Section -->
+    <section class="py-[160px] px-[50px] max-w-[1440px] mx-auto max-sm:py-[100px] max-sm:px-[24px]">
+      <div class="mb-[80px] max-md:text-center">
+        <span class="block text-[16px] text-[#7C7C7C] font-normal mb-[12px]  tracking-[0.15em]">About Me</span>
+        <h2 class="text-[56px] text-black font-medium tracking-tight leading-[1.05] mb-[4px] max-sm:text-[40px]">Jishad
+          Musthafa</h2>
+        <p class="text-[28px] text-[#7C7C7C] font-normal max-sm:text-[22px]">Coach</p>
+      </div>
+
+      <div class="grid grid-cols-[420fr_780fr] gap-[60px] items-stretch max-md:grid-cols-1 max-md:gap-[60px]">
+        <!-- Left Portrait Photo (Stretched to match text content height exactly) -->
+        <div class="relative w-full max-w-[340px] max-md:mx-auto h-full max-md:h-[450px] max-sm:h-[350px]">
+          <div
+            class="absolute inset-0 rounded-[24px] overflow-hidden border-[3px] border-brandYellow max-md:relative max-md:aspect-[0.77]">
+            <img src="img/jishad.jpg" alt="Jishad Musthafa - Coach & Trainer" class="w-full h-full object-cover block">
+          </div>
+        </div>
+        <!-- Right Content & Contact -->
+        <div class="flex flex-col justify-start pt-0 max-md:items-center max-md:text-center">
+          <div
+            class="text-[22px] leading-[1.5] text-black font-light tracking-normal mb-[36px] max-sm:text-[18px] max-sm:mb-[24px]">
+            <p class="mb-[24px] max-sm:mb-[16px]">
+              A passionate trainer, coach, and organizational development professional dedicated to helping people
+              discover their potential and achieve meaningful growth.
+            </p>
+            <p class="mb-[24px] max-sm:mb-[16px]">
+              With experience spanning human resources, operations management, leadership development, corporate
+              training, and youth empowerment, Jishad combines practical business insights with transformational
+              learning methodologies.
+            </p>
+            <p>
+              Mission is to inspire growth, develop leaders, and create lasting impact in individuals, institutions, and
+              organizations.
+            </p>
+          </div>
+
+          <div class="flex flex-col gap-[18px] items-start max-md:items-center">
+            <div
+              class="font-sans font-medium text-[32px] text-black border-b-[1.5px] border-black pb-[6px] w-[172px] text-left transition-all duration-200 hover:opacity-70 cursor-pointer block">
+              Connect
+            </div>
+
+            <!-- Social Pills Row -->
+            <div class="flex gap-[16px] flex-wrap max-md:justify-center">
+              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer"
+                class="social-pill-linkedin inline-flex items-center bg-white border border-[#0a66c2] text-black pl-[8px] pr-[20px] rounded-full font-medium text-[16px] gap-[8px] transition-all duration-200 ease-smooth hover:bg-sky-50/50 hover:-translate-y-[0.5px] h-[40px]">
+                <img src="img/linkedin.png" alt="LinkedIn logo" class="w-[24px] h-[24px] object-contain rounded-full">
+                <span>LinkedIn</span>
+              </a>
+              <a href="https://wa.me/" target="_blank" rel="noopener noreferrer"
+                class="social-pill-whatsapp inline-flex items-center bg-white border border-[#25d366] text-black pl-[8px] pr-[20px] rounded-full font-medium text-[16px] gap-[8px] transition-all duration-200 ease-smooth hover:bg-green-50/50 hover:-translate-y-[0.5px] h-[40px]">
+                <img src="img/whatsapp.png" alt="WhatsApp logo" class="w-[24px] h-[24px] object-contain rounded-full">
+                <span>Whatsapp</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Interactive Booking/Contact Modal -->
+  <div
+    class="fixed inset-0 bg-black/55 backdrop-blur-[8px] z-[1000] flex items-center justify-center p-[20px] opacity-0 pointer-events-none transition-opacity duration-300 ease-smooth modal-overlay"
+    id="bookingModal" aria-hidden="true">
+    <div
+      class="bg-white w-full max-w-[520px] rounded-none p-[40px] relative shadow-[0_24px_64px_rgba(0,0,0,0.15)] border-2 border-black -translate-y-[30px] scale-[0.95] transition-all duration-300 ease-smooth modal-card"
+      role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <button
+        class="absolute top-[24px] right-[24px] text-[32px] leading-none text-[#7C7C7C] hover:text-black cursor-pointer bg-none border-none transition-colors duration-200 outline-none"
+        id="modalCloseBtn" aria-label="Close modal">&times;</button>
+
+      <!-- Modal Form State -->
+      <div id="modalFormState">
+        <h3 class="text-[28px] font-black tracking-[-0.03em] mb-[8px] text-black" id="modalTitle">Book a Consultation
+        </h3>
+        <p class="text-[15px] text-[#7C7C7C] mb-[28px]">Fill in the form below, and Jishad will connect with you to
+          discuss how we can work together.</p>
+
+        <form class="flex flex-col" id="bookingForm" novalidate>
+          <div class="mb-[20px] flex flex-col group">
+            <label class="text-[13px] font-bold mb-[6px] text-black uppercase tracking-wider" for="clientName">Full
+              Name</label>
+            <input
+              class="font-sans text-[15px] px-[16px] py-[12px] border-[1.5px] border-black rounded-none bg-[#f9f9f9] outline-none transition-all duration-200 focus:bg-white focus:shadow-[0_0_0_3px_rgba(0,0,0,0.05)]"
+              type="text" id="clientName" required placeholder="e.g. John Doe">
+            <span class="text-[#e03131] text-[12px] mt-[4px] font-medium hidden" id="nameError">Name is required</span>
+          </div>
+
+          <div class="mb-[20px] flex flex-col group">
+            <label class="text-[13px] font-bold mb-[6px] text-black uppercase tracking-wider" for="clientEmail">Email
+              Address</label>
+            <input
+              class="font-sans text-[15px] px-[16px] py-[12px] border-[1.5px] border-black rounded-none bg-[#f9f9f9] outline-none transition-all duration-200 focus:bg-white focus:shadow-[0_0_0_3px_rgba(0,0,0,0.05)]"
+              type="email" id="clientEmail" required placeholder="e.g. john@example.com">
+            <span class="text-[#e03131] text-[12px] mt-[4px] font-medium hidden" id="emailError">Please enter a valid
+              email address</span>
+          </div>
+
+          <div class="mb-[20px] flex flex-col group">
+            <label class="text-[13px] font-bold mb-[6px] text-black uppercase tracking-wider" for="serviceType">How can
+              I help you?</label>
+            <select
+              class="font-sans text-[15px] px-[16px] py-[12px] border-[1.5px] border-black rounded-none bg-[#f9f9f9] outline-none transition-all duration-200 focus:bg-white focus:shadow-[0_0_0_3px_rgba(0,0,0,0.05)]"
+              id="serviceType" required>
+              <option value="" disabled selected>Select a Service</option>
+              <option value="consultation">General Consultation</option>
+              <option value="leadership">Leadership Development</option>
+              <option value="training">Corporate Training</option>
+              <option value="coaching">One-on-One Coaching</option>
+            </select>
+            <span class="text-[#e03131] text-[12px] mt-[4px] font-medium hidden" id="serviceError">Please select a
+              service</span>
+          </div>
+
+          <div class="mb-[20px] flex flex-col group">
+            <label class="text-[13px] font-bold mb-[6px] text-black uppercase tracking-wider"
+              for="clientMessage">Message (Optional)</label>
+            <textarea
+              class="font-sans text-[15px] px-[16px] py-[12px] border-[1.5px] border-black rounded-none bg-[#f9f9f9] outline-none transition-all duration-200 focus:bg-white focus:shadow-[0_0_0_3px_rgba(0,0,0,0.05)] resize-none"
+              id="clientMessage" rows="4" placeholder="Briefly describe your goals..."></textarea>
+          </div>
+
+          <button type="submit"
+            class="w-full h-[52px] text-[18px] font-bold mt-[10px] relative bg-black text-btnText hover:bg-neutral-800 transition-all duration-200 rounded-[12px] outline-none flex items-center justify-center cursor-pointer"
+            id="submitFormBtn">
+            <span>Send Request</span>
+            <div
+              class="w-[20px] h-[20px] border-2 border-btnText/30 border-t-btnText rounded-full absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 animate-spin hidden"
+              id="btnSpinner"></div>
+          </button>
+        </form>
+      </div>
+
+      <!-- Modal Success State (Hidden by default) -->
+      <div id="modalSuccessState"
+        class="text-center py-[20px] flex flex-col items-center animate-[fadeIn_0.4s_ease_forwards] hidden">
+        <div class="mb-[24px]">
+          <svg
+            class="w-[64px] h-[64px] rounded-full block stroke-[2] stroke-[#2b8a3e] [stroke-miterlimit:10] shadow-[inset_0px_0px_0px_#2b8a3e] animate-[fill_0.4s_ease-in-out_0.4s_forwards]"
+            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+            <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none" />
+            <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+          </svg>
+        </div>
+        <h4 class="text-[24px] font-black text-black mb-[12px]">Request Sent!</h4>
+        <p class="text-[15px] text-[#7C7C7C] mb-[30px] max-w-[360px]">Thank you for reaching out. Coach Jishad Musthafa
+          will review your request and get back to you within 24-48 hours.</p>
+        <button
+          class="w-[160px] h-[48px] bg-black text-btnText hover:bg-neutral-800 transition-all duration-200 outline-none font-bold flex items-center justify-center rounded-[12px] cursor-pointer"
+          id="closeSuccessBtn">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
