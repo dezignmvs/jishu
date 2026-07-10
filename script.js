@@ -173,4 +173,39 @@ document.addEventListener('DOMContentLoaded', () => {
       serviceType.parentElement.classList.remove('invalid');
     }
   });
+
+  // --- Stats Counter Animation ---
+  const initCounters = () => {
+    const counters = document.querySelectorAll('.counter');
+    const speed = 120; // Controls speed of count-up
+    
+    counters.forEach(counter => {
+      const updateCount = () => {
+        const target = +counter.getAttribute('data-target');
+        const count = +counter.innerText;
+        const inc = target > 100 ? Math.ceil(target / speed) : 1;
+        
+        if (count < target) {
+          counter.innerText = Math.min(target, count + inc);
+          setTimeout(updateCount, 15);
+        } else {
+          counter.innerText = target;
+        }
+      };
+      
+      // Trigger count-up only when cards scroll into view
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            updateCount();
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      
+      observer.observe(counter);
+    });
+  };
+  
+  initCounters();
 });
