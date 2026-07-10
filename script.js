@@ -54,12 +54,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Open Jishad's WhatsApp link directly for all booking/consultation triggers
   const whatsappUrl = 'https://api.whatsapp.com/send/?phone=919656141881&text&type=phone_number&app_absent=0';
-  openModalTriggers.forEach((btn, index) => {
+  openModalTriggers.forEach((btn) => {
     if (!btn) return;
     
     btn.addEventListener('click', (e) => {
       e.preventDefault();
-      window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+      const a = document.createElement('a');
+      a.href = whatsappUrl;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
     });
   });
 
