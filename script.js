@@ -1,3 +1,19 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAQPeQLh2IQbI7ooVdgqEDS-vW585xfjyk",
+  authDomain: "console-92a8b.firebaseapp.com",
+  projectId: "console-92a8b",
+  storageBucket: "console-92a8b.firebasestorage.app",
+  messagingSenderId: "100288837026",
+  appId: "1:100288837026:web:bdbca55cd6d6c047b7aefb",
+  measurementId: "G-HQHKX2QH5J"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
 document.addEventListener('DOMContentLoaded', () => {
   // DOM Elements
   const bookingModal = document.getElementById('bookingModal');
@@ -241,10 +257,23 @@ document.addEventListener('DOMContentLoaded', () => {
       const btnText = contactSubmitBtn.querySelector('span');
       if (btnText) btnText.textContent = 'Sending...';
 
-      setTimeout(() => {
+      // Save message to Firestore
+      addDoc(collection(db, "dmx"), {
+        name: contactName.value.trim(),
+        email: contactEmail.value.trim(),
+        message: contactMessage.value.trim(),
+        timestamp: serverTimestamp()
+      })
+      .then(() => {
         contactFormInputs.classList.add('hidden');
         contactFormSuccess.classList.remove('hidden');
-      }, 1200);
+      })
+      .catch((error) => {
+        console.error("Error sending message to Firestore: ", error);
+        alert("Failed to send message. Please try again.");
+        contactSubmitBtn.disabled = false;
+        if (btnText) btnText.textContent = 'Send';
+      });
     });
 
     // Clear red border on input typing
@@ -255,3 +284,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+
+// Register Service Worker for PWA support
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then((reg) => console.log('Service Worker registered successfully:', reg.scope))
+      .catch((err) => console.error('Service Worker registration failed:', err));
+  });
+}

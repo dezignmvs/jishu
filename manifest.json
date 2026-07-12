@@ -1,0 +1,24 @@
+{
+  "name": "Jishad Musthafa | Transformational Coach & Trainer",
+  "short_name": "Jishad Coach",
+  "description": "Helping individuals and organizations unlock growth through leadership development, corporate training, and strategic learning solutions.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#FFC20D",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "faviocn.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "faviocn.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

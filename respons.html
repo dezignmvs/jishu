@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Responses | Jishad Musthafa</title>
+  <link rel="icon" type="image/png" href="faviocn.png">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#FFC20D">
+  <link rel="stylesheet" href="responses.css">
+</head>
+<body>
+  <div class="dashboard">
+    <header class="dashboard-header">
+      <div class="brand">
+        <img src="img/logo.png" alt="Logo" onerror="this.style.display='none'">
+        <h1>Contact <span>Responses</span></h1>
+      </div>
+      <div class="header-actions">
+        <button id="pwaInstallBtn" class="download-btn" style="display: none;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          Download App
+        </button>
+        <a href="index.html" class="back-btn">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+          Back to Website
+        </a>
+      </div>
+    </header>
+
+    <!-- Stats Section -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+            <polyline points="22,6 12,13 2,6"></polyline>
+          </svg>
+        </div>
+        <div class="stat-info">
+          <span class="stat-value" id="totalMessages">0</span>
+          <span class="stat-label">Total Messages</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Search Controls -->
+    <div class="controls-bar">
+      <div class="search-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" id="searchInput" class="search-input" placeholder="Search by name, email, or message content...">
+      </div>
+    </div>
+
+    <!-- Message List Container -->
+    <div class="responses-container" id="responsesContainer">
+      <!-- Loading State -->
+      <div class="loading-spinner" id="loadingSpinner">
+        <div class="spinner"></div>
+        <p>Fetching messages from Firestore...</p>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+    import { getFirestore, collection, onSnapshot, query, orderBy, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+
+    // Firebase configuration provided by the user
+    const firebaseConfig = {
+      apiKey: "AIzaSyAQPeQLh2IQbI7ooVdgqEDS-vW585xfjyk",
+      authDomain: "console-92a8b.firebaseapp.com",
+      projectId: "console-92a8b",
+      storageBucket: "console-92a8b.firebasestorage.app",
+      messagingSenderId: "100288837026",
+      appId: "1:100288837026:web:bdbca55cd6d6c047b7aefb",
+      measurementId: "G-HQHKX2QH5J"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const responsesContainer = document.getElementById("responsesContainer");
+    const totalMessagesEl = document.getElementById("totalMessages");
+    const searchInput = document.getElementById("searchInput");
+
+    let allMessages = [];
+
+    // Favicon & Page Title notification badge logic
+    const originalTitle = "Contact Responses | Jishad Musthafa";
+    let unreadCount = 0;
+    let isWindowActive = true;
+    let isInitialLoad = true;
+
+    // Track window focus/blur
+    window.addEventListener('focus', () => {
+      isWindowActive = true;
+      resetUnreadNotifications();
+    });
+
+    window.addEventListener('blur', () => {
+      isWindowActive = false;
+    });
+
+    // Reset unread count, tab title, and favicon
+    function resetUnreadNotifications() {
+      unreadCount = 0;
+      document.title = originalTitle;
+      resetFavicon();
+    }
+
+    // Reset favicon to normal
+    function resetFavicon() {
+      const favicon = document.querySelector('link[rel="icon"]');
+      if (favicon) {
+        favicon.href = 'faviocn.png';
+      }
+    }
+
+    // Draw notification badge dot on favicon canvas
+    function setFaviconBadge() {
+      const favicon = document.querySelector('link[rel="icon"]');
+      if (!favicon) return;
+
+      const img = new Image();
+      img.src = 'faviocn.png';
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = 32;
+        canvas.height = 32;
+        const ctx = canvas.getContext('2d');
+
+        // Draw original favicon
+        ctx.drawImage(img, 0, 0, 32, 32);
+
+        // Draw red badge circle (vibrant notification dot)
+        ctx.beginPath();
+        ctx.arc(24, 8, 7, 0, 2 * Math.PI);
+        ctx.fillStyle = '#f03e3e'; 
+        ctx.fill();
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Update favicon link href
+        favicon.href = canvas.toDataURL('image/png');
+      };
+    }
+
+    function handleIncomingMessage(count) {
+      if (!isWindowActive) {
+        unreadCount += count;
+        document.title = `(${unreadCount}) ${originalTitle}`;
+        setFaviconBadge();
+      }
+    }
+
+    // Real-time listener to Firestore dmx collection
+    const q = query(collection(db, "dmx"), orderBy("timestamp", "desc"));
+    
+    onSnapshot(q, (snapshot) => {
+      allMessages = [];
+      let newAddedCount = 0;
+
+      snapshot.forEach((doc) => {
+        allMessages.push({ id: doc.id, ...doc.data() });
+      });
+      
+      // Track if new documents were added after initial loading
+      if (!isInitialLoad) {
+        snapshot.docChanges().forEach((change) => {
+          const data = change.doc.data();
+          if (change.type === 'added' && data.email && data.message) {
+            newAddedCount++;
+          }
+        });
+      }
+
+      // Perform render with loaded data
+      renderMessages(allMessages);
+
+      if (!isInitialLoad && newAddedCount > 0) {
+        handleIncomingMessage(newAddedCount);
+      }
+
+      isInitialLoad = false;
+    }, (error) => {
+      console.error("Error fetching Firestore updates:", error);
+      responsesContainer.innerHTML = `
+        <div class="empty-state">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+          <h3>Failed to load messages</h3>
+          <p>Please check your Firestore security rules or internet connection.</p>
+        </div>
+      `;
+    });
+
+    // Format firestore timestamp to human-readable date-time
+    function formatTime(timestamp) {
+      if (!timestamp) return "Just now";
+      const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+      return date.toLocaleString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+      });
+    }
+
+    // Render list of message cards
+    function renderMessages(messagesToRender) {
+      const spinner = document.getElementById("loadingSpinner");
+      if (spinner) spinner.style.display = "none";
+
+      totalMessagesEl.textContent = allMessages.length;
+
+      if (messagesToRender.length === 0) {
+        responsesContainer.innerHTML = `
+          <div class="empty-state">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+            <h3>No messages found</h3>
+            <p>${allMessages.length === 0 ? "You haven't received any contact messages yet." : "No messages match your search criteria."}</p>
+          </div>
+        `;
+        return;
+      }
+
+      responsesContainer.innerHTML = "";
+      messagesToRender.forEach((msg) => {
+        const card = document.createElement("div");
+        card.className = "message-card";
+        
+        const avatarLetter = msg.name ? msg.name.trim().charAt(0) : "?";
+        const formattedDate = formatTime(msg.timestamp);
+
+        card.innerHTML = `
+          <div class="message-header">
+            <div class="sender-profile">
+              <div class="avatar">${escapeHtml(avatarLetter)}</div>
+              <div class="sender-details">
+                <h3>${escapeHtml(msg.name || "Anonymous")}</h3>
+                <a href="mailto:${escapeHtml(msg.email)}">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                    <polyline points="22,6 12,13 2,6"></polyline>
+                  </svg>
+                  ${escapeHtml(msg.email || "No Email")}
+                </a>
+              </div>
+            </div>
+            <div class="message-meta">
+              <span class="time-badge">${formattedDate}</span>
+            </div>
+          </div>
+          <div class="message-body">${escapeHtml(msg.message || "")}</div>
+          <div class="message-actions">
+            <button class="delete-btn" data-id="${msg.id}">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                <line x1="10" y1="11" x2="10" y2="17"></line>
+                <line x1="14" y1="11" x2="14" y2="17"></line>
+              </svg>
+              Delete
+            </button>
+          </div>
+        `;
+        responsesContainer.appendChild(card);
+      });
+
+      // Bind delete functionality to cards
+      document.querySelectorAll(".delete-btn").forEach((btn) => {
+        btn.addEventListener("click", async (e) => {
+          const docId = btn.getAttribute("data-id");
+          if (confirm("Are you sure you want to delete this message?")) {
+            try {
+              btn.disabled = true;
+              btn.textContent = "Deleting...";
+              await deleteDoc(doc(db, "dmx", docId));
+            } catch (err) {
+              console.error("Error deleting message:", err);
+              alert("Failed to delete message. Please check your Firestore rules.");
+              btn.disabled = false;
+              btn.innerHTML = `
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                  <line x1="10" y1="11" x2="10" y2="17"></line>
+                  <line x1="14" y1="11" x2="14" y2="17"></line>
+                </svg>
+                Delete
+              `;
+            }
+          }
+        });
+      });
+    }
+
+    // Escape raw HTML string for secure rendering (prevents XSS vulnerabilities)
+    function escapeHtml(str) {
+      if (!str) return "";
+      return str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    // Real-time search filtering on input event
+    searchInput.addEventListener("input", (e) => {
+      const searchTerm = e.target.value.toLowerCase().trim();
+      if (!searchTerm) {
+        renderMessages(allMessages);
+        return;
+      }
+      
+      const filtered = allMessages.filter((msg) => {
+        const name = (msg.name || "").toLowerCase();
+        const email = (msg.email || "").toLowerCase();
+        const body = (msg.message || "").toLowerCase();
+        return name.includes(searchTerm) || email.includes(searchTerm) || body.includes(searchTerm);
+      });
+      
+      renderMessages(filtered);
+    });
+
+    // Custom PWA installation prompt trigger
+    let deferredPrompt;
+    const pwaInstallBtn = document.getElementById('pwaInstallBtn');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      // Prevent the browser mini-infobar from appearing automatically
+      e.preventDefault();
+      // Stash the event so it can be triggered later
+      deferredPrompt = e;
+      // Show the custom "Download App" button
+      if (pwaInstallBtn) {
+        pwaInstallBtn.style.display = 'inline-flex';
+      }
+    });
+
+    if (pwaInstallBtn) {
+      pwaInstallBtn.addEventListener('click', async () => {
+        if (deferredPrompt) {
+          // Show the browser installation prompt
+          deferredPrompt.prompt();
+          // Wait for the user's choice
+          const { outcome } = await deferredPrompt.userChoice;
+          console.log(`User response to install prompt: ${outcome}`);
+          // Clear prompt and hide button
+          deferredPrompt = null;
+          pwaInstallBtn.style.display = 'none';
+        }
+      });
+    }
+
+    window.addEventListener('appinstalled', (evt) => {
+      console.log('App was successfully installed.');
+      if (pwaInstallBtn) {
+        pwaInstallBtn.style.display = 'none';
+      }
+    });
+
+    // Register Service Worker for PWA support
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then((reg) => console.log('Service Worker registered successfully from dashboard:', reg.scope))
+          .catch((err) => console.error('Service Worker registration failed from dashboard:', err));
+      });
+    }
+  </script>
+</body>
+</html>
