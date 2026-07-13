@@ -444,6 +444,250 @@
       </div>
     </section>
 
+    <!-- Slider Section -->
+    <section class="py-[80px] bg-[#FAF9F5] border-t border-b border-black/5 overflow-hidden">
+      <div class="max-w-[1200px] mx-auto px-[50px] max-sm:px-[24px]">
+        <div class="mb-[40px] flex flex-col md:flex-row md:items-end justify-between gap-[20px]">
+          <div>
+            <span class="block text-[14px] text-[#7C7C7C] font-semibold mb-[8px] uppercase tracking-[0.15em]">Moments in Action</span>
+            <h2 class="text-[44px] text-black font-semibold tracking-tight leading-[1.1] max-sm:text-[32px] font-sans">
+              Our Training Gallery
+            </h2>
+            <p class="text-[17px] text-[#7C7C7C] mt-[8px] max-w-[600px] font-light">
+              Explore dynamic learning environments, interactive workshops, and leadership development sessions led by Jishad Musthafa.
+            </p>
+          </div>
+          <div class="flex gap-[12px]">
+            <button id="prevSlide" class="w-[48px] h-[48px] rounded-full border border-black flex items-center justify-center bg-white text-black hover:bg-black hover:text-white transition-all duration-200 cursor-pointer" aria-label="Previous image">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+              </svg>
+            </button>
+            <button id="nextSlide" class="w-[48px] h-[48px] rounded-full border border-black flex items-center justify-center bg-white text-black hover:bg-black hover:text-white transition-all duration-200 cursor-pointer" aria-label="Next image">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Slider Viewport -->
+        <div class="relative overflow-hidden rounded-[24px] border-[3px] border-black">
+          <div id="sliderTrack" class="flex transition-transform duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)]" style="transform: translateX(0%);">
+            <!-- Slide 1 -->
+            <a href="gallery.html" class="w-full flex-shrink-0 relative group block aspect-[21/9] max-md:aspect-[16/10] overflow-hidden">
+              <img src="img/leadership.jpg" alt="Leadership Development" class="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-700 ease-out">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent flex flex-col justify-end p-[40px] max-sm:p-[20px]">
+                <span class="text-brandYellow text-[14px] font-bold uppercase tracking-wider mb-[6px]">Leadership Development</span>
+                <h3 class="text-white text-[28px] font-medium max-sm:text-[20px]">Inspiring Future Leaders</h3>
+              </div>
+            </a>
+            <!-- Slide 2 -->
+            <a href="gallery.html" class="w-full flex-shrink-0 relative group block aspect-[21/9] max-md:aspect-[16/10] overflow-hidden">
+              <img src="img/training.jpg" alt="Corporate Training" class="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-700 ease-out">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent flex flex-col justify-end p-[40px] max-sm:p-[20px]">
+                <span class="text-brandYellow text-[14px] font-bold uppercase tracking-wider mb-[6px]">Corporate Training</span>
+                <h3 class="text-white text-[28px] font-medium max-sm:text-[20px]">Professional Development & Excellence</h3>
+              </div>
+            </a>
+            <!-- Slide 3 -->
+            <a href="gallery.html" class="w-full flex-shrink-0 relative group block aspect-[21/9] max-md:aspect-[16/10] overflow-hidden">
+              <img src="img/development.jpg" alt="Organizational Development" class="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-700 ease-out">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent flex flex-col justify-end p-[40px] max-sm:p-[20px]">
+                <span class="text-brandYellow text-[14px] font-bold uppercase tracking-wider mb-[6px]">Organizational Development</span>
+                <h3 class="text-white text-[28px] font-medium max-sm:text-[20px]">Strategic Learning & Dynamic Growth</h3>
+              </div>
+            </a>
+            <!-- Slide 4 -->
+            <a href="gallery.html" class="w-full flex-shrink-0 relative group block aspect-[21/9] max-md:aspect-[16/10] overflow-hidden">
+              <img src="img/meeting.jpg" alt="Team Collaboration" class="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-700 ease-out">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent flex flex-col justify-end p-[40px] max-sm:p-[20px]">
+                <span class="text-brandYellow text-[14px] font-bold uppercase tracking-wider mb-[6px]">Team Collaboration</span>
+                <h3 class="text-white text-[28px] font-medium max-sm:text-[20px]">Coaching For Peak Performance</h3>
+              </div>
+            </a>
+          </div>
+
+          <!-- Page Indicator Dots -->
+          <div id="sliderDots" class="absolute bottom-[20px] left-1/2 -translate-x-1/2 flex gap-[8px] z-10">
+            <button class="slide-dot w-[10px] h-[10px] rounded-full bg-white/50 hover:bg-white transition-all cursor-pointer" data-index="0" aria-label="Go to slide 1"></button>
+            <button class="slide-dot w-[10px] h-[10px] rounded-full bg-white/50 hover:bg-white transition-all cursor-pointer" data-index="1" aria-label="Go to slide 2"></button>
+            <button class="slide-dot w-[10px] h-[10px] rounded-full bg-white/50 hover:bg-white transition-all cursor-pointer" data-index="2" aria-label="Go to slide 3"></button>
+            <button class="slide-dot w-[10px] h-[10px] rounded-full bg-white/50 hover:bg-white transition-all cursor-pointer" data-index="3" aria-label="Go to slide 4"></button>
+          </div>
+        </div>
+
+        <!-- View Full Page CTA Link -->
+        <div class="mt-[36px] flex justify-center font-sans">
+          <a href="gallery.html" class="group inline-flex items-center justify-center gap-[10px] bg-black text-btnText font-medium text-[16px] px-[28px] h-[50px] rounded-[12px] border border-black hover:bg-brandYellow hover:text-black hover:-translate-y-[2px] transition-all duration-200 ease-smooth">
+            <span>View Full Gallery</span>
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="transition-transform duration-200 group-hover:translate-x-[2px]">
+              <path d="M5 12h14M12 5l7 7-7 7"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+      import { getFirestore, collection, onSnapshot, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+
+      // Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyAQPeQLh2IQbI7ooVdgqEDS-vW585xfjyk",
+        authDomain: "console-92a8b.firebaseapp.com",
+        projectId: "console-92a8b",
+        storageBucket: "console-92a8b.firebasestorage.app",
+        messagingSenderId: "100288837026",
+        appId: "1:100288837026:web:bdbca55cd6d6c047b7aefb",
+        measurementId: "G-HQHKX2QH5J"
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+
+      const initSlider = () => {
+        const track = document.getElementById('sliderTrack');
+        const prevBtn = document.getElementById('prevSlide');
+        const nextBtn = document.getElementById('nextSlide');
+        const dotsContainer = document.getElementById('sliderDots');
+        
+        let currentIndex = 0;
+        let slidesCount = 0;
+        let autoSlideInterval;
+        let items = [];
+
+        function updateSlider() {
+          if (slidesCount === 0) return;
+          track.style.transform = `translateX(-${currentIndex * 100}%)`;
+          const dots = dotsContainer.querySelectorAll('.slide-dot');
+          dots.forEach((dot, idx) => {
+            if (idx === currentIndex) {
+              dot.classList.remove('bg-white/50', 'w-[10px]');
+              dot.classList.add('bg-[#FFC20D]', 'w-[20px]');
+            } else {
+              dot.classList.remove('bg-[#FFC20D]', 'w-[20px]');
+              dot.classList.add('bg-white/50', 'w-[10px]');
+            }
+          });
+        }
+
+        function showNextSlide() {
+          if (slidesCount === 0) return;
+          currentIndex = (currentIndex + 1) % slidesCount;
+          updateSlider();
+        }
+
+        function showPrevSlide() {
+          if (slidesCount === 0) return;
+          currentIndex = (currentIndex - 1 + slidesCount) % slidesCount;
+          updateSlider();
+        }
+
+        if (nextBtn) {
+          nextBtn.addEventListener('click', () => {
+            showNextSlide();
+            resetAutoSlide();
+          });
+        }
+
+        if (prevBtn) {
+          prevBtn.addEventListener('click', () => {
+            showPrevSlide();
+            resetAutoSlide();
+          });
+        }
+
+        function startAutoSlide() {
+          if (autoSlideInterval) clearInterval(autoSlideInterval);
+          autoSlideInterval = setInterval(showNextSlide, 5000);
+        }
+
+        function resetAutoSlide() {
+          clearInterval(autoSlideInterval);
+          startAutoSlide();
+        }
+
+        function escapeHtml(str) {
+          if (!str) return "";
+          return str
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+        }
+
+        // Live Database Listener
+        const progQuery = query(collection(db, "programData"), orderBy("date", "desc"), limit(6));
+        onSnapshot(progQuery, (snapshot) => {
+          items = [];
+          snapshot.forEach(doc => {
+            items.push(doc.data());
+          });
+
+          // Fallback if no items in DB (or seeding hasn't completed yet)
+          if (items.length === 0) {
+            items = [
+              { title: "Inspiring Future Leaders", category: "Leadership Development", image: "img/leadership.jpg" },
+              { title: "Professional Development & Excellence", category: "Corporate Training", image: "img/training.jpg" },
+              { title: "Strategic Learning & Dynamic Growth", category: "Organizational Development", image: "img/development.jpg" },
+              { title: "Coaching For Peak Performance", category: "Team Collaboration", image: "img/meeting.jpg" }
+            ];
+          }
+
+          slidesCount = items.length;
+          currentIndex = 0;
+
+          // Render track
+          track.innerHTML = "";
+          items.forEach(item => {
+            const slide = document.createElement("a");
+            slide.href = "gallery.html";
+            slide.className = "w-full flex-shrink-0 relative group block aspect-[21/9] max-md:aspect-[16/10] overflow-hidden";
+            slide.innerHTML = `
+              <img src="${item.image || 'img/training.jpg'}" alt="${escapeHtml(item.title)}" class="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-700 ease-out" onerror="this.src='img/training.jpg'">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent flex flex-col justify-end p-[40px] max-sm:p-[20px]">
+                <span class="text-brandYellow text-[14px] font-bold uppercase tracking-wider mb-[6px]">${escapeHtml(item.category)}</span>
+                <h3 class="text-white text-[28px] font-medium max-sm:text-[20px]">${escapeHtml(item.title)}</h3>
+              </div>
+            `;
+            track.appendChild(slide);
+          });
+
+          // Render dots
+          if (dotsContainer) {
+            dotsContainer.innerHTML = "";
+            items.forEach((_, idx) => {
+              const dot = document.createElement("button");
+              dot.className = "slide-dot w-[10px] h-[10px] rounded-full bg-white/50 hover:bg-white transition-all cursor-pointer";
+              dot.setAttribute("data-index", idx);
+              dot.setAttribute("aria-label", `Go to slide ${idx + 1}`);
+              dot.addEventListener('click', (e) => {
+                currentIndex = idx;
+                updateSlider();
+                resetAutoSlide();
+              });
+              dotsContainer.appendChild(dot);
+            });
+          }
+
+          updateSlider();
+          startAutoSlide();
+        });
+      };
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initSlider);
+      } else {
+        initSlider();
+      }
+    </script>
+
     <!-- Testimonials Section -->
     <section class="w-full bg-[#F4F9FD] py-[60px] px-[50px] max-sm:py-[40px] max-sm:px-[24px] mt-[40px] border-t border-black/5">
       <div class="max-w-[1200px] mx-auto">

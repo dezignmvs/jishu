@@ -14,7 +14,7 @@
     <header class="dashboard-header">
       <div class="brand">
         <img src="img/logo.png" alt="Logo" onerror="this.style.display='none'">
-        <h1>Contact <span>Responses</span></h1>
+        <h1 id="brandTitle">Admin <span>Portal</span></h1>
       </div>
       <div class="header-actions">
         <button id="pwaInstallBtn" class="download-btn" style="display: none;">
@@ -25,7 +25,14 @@
           </svg>
           Download App
         </button>
-        <a href="index.html" class="back-btn">
+        <button id="backToPortalBtn" class="back-btn" style="display: none;">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+          Back to Portal
+        </button>
+        <a href="index.html" class="back-btn" id="backToWebsiteLink">
           <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="19" y1="12" x2="5" y2="12"></line>
             <polyline points="12 19 5 12 12 5"></polyline>
@@ -35,46 +42,191 @@
       </div>
     </header>
 
-    <!-- Stats Section -->
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-icon">
+    <!-- Portal Landing View -->
+    <div id="landingView" class="portal-landing">
+      <div class="welcome-box">
+        <h2>Welcome to the Admin Dashboard</h2>
+        <p>Manage contact messages or publish new program details to your website database console.</p>
+      </div>
+      <div class="portal-grid">
+        <button id="showNotificationsBtn" class="portal-card-btn">
+          <div class="portal-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+            </svg>
+          </div>
+          <div class="portal-card-info">
+            <h3>Notification Panel</h3>
+            <p>View and manage incoming contact messages from your site.</p>
+            <span class="badge" id="landingUnreadBadge">Loading...</span>
+          </div>
+        </button>
+
+        <button id="showUploaderBtn" class="portal-card-btn">
+          <div class="portal-card-icon" style="background: rgba(12, 166, 120, 0.08); color: var(--color-success);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+          </div>
+          <div class="portal-card-info">
+            <h3>Upload Program Data</h3>
+            <p>Add and manage training program sessions, workshops and dates.</p>
+            <span class="badge" style="background: rgba(12, 166, 120, 0.1); color: var(--color-success);">Console Active</span>
+          </div>
+        </button>
+      </div>
+    </div>
+
+    <!-- Notifications View -->
+    <div id="notificationsView" style="display: none;">
+      <!-- Stats Section -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+              <polyline points="22,6 12,13 2,6"></polyline>
+            </svg>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value" id="totalMessages">0</span>
+            <span class="stat-label">Total Messages</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Search Controls -->
+      <div class="controls-bar">
+        <div class="search-box">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-            <polyline points="22,6 12,13 2,6"></polyline>
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" id="searchInput" class="search-input" placeholder="Search by name, email, or message content...">
+        </div>
+      </div>
+
+      <!-- Message List Container -->
+      <div class="responses-container" id="responsesContainer">
+        <!-- Loading State -->
+        <div class="loading-spinner" id="loadingSpinner">
+          <div class="spinner"></div>
+          <p>Fetching messages from Firestore...</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Uploader View -->
+    <div id="uploaderView" style="display: none;">
+      <div id="uploaderFormFields" class="uploader-card">
+        <div class="view-header">
+          <h2>Program Details</h2>
+          <p>Publish a new entry detailing a workshop or coaching curriculum.</p>
+        </div>
+        <form id="programForm" class="uploader-form">
+          <div class="form-group">
+            <label for="progTitle">Program Title</label>
+            <input type="text" id="progTitle" required placeholder="e.g. Strategic Leadership Retreat">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="progCategory">Category</label>
+              <select id="progCategory" required>
+                <option value="" disabled selected>Select Category</option>
+                <option value="Corporate Training">Corporate Training</option>
+                <option value="Leadership Development">Leadership Development</option>
+                <option value="Youth Empowerment">Youth Empowerment</option>
+                <option value="Executive Coaching">Executive Coaching</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="progDate">Program Date</label>
+              <input type="date" id="progDate" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="progImageFile">Image Cover File</label>
+              <div class="custom-file-upload">
+                <input type="file" id="progImageFile" accept="image/*" required>
+                <div class="upload-trigger-content">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="17 8 12 3 7 8"></polyline>
+                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                  </svg>
+                  <span id="fileNameLabel">Choose Image File...</span>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Image Preview</label>
+              <div id="imagePreviewContainer" class="preview-box">
+                <span class="preview-placeholder">No image selected</span>
+                <img id="previewImage" src="" alt="Preview" style="display: none;">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="progDesc">Program Description</label>
+            <textarea id="progDesc" rows="5" required placeholder="Describe the course content, targeted outcomes, benefits, and schedule details..."></textarea>
+          </div>
+
+          <button type="submit" class="submit-btn" id="uploadSubmitBtn">
+            Submit Program Data
+          </button>
+        </form>
+      </div>
+
+      <div id="uploadSuccess" class="upload-success-state" style="display: none;">
+        <div class="success-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
           </svg>
         </div>
-        <div class="stat-info">
-          <span class="stat-value" id="totalMessages">0</span>
-          <span class="stat-label">Total Messages</span>
+        <h3>Program Data Uploaded Successfully!</h3>
+        <p>The course has been compiled and added to your Firestore database system.</p>
+        <button id="resetUploadBtn" class="download-btn" style="margin-top: 10px;">Upload Another Program</button>
+      </div>
+
+      <!-- Database Table Section -->
+      <div class="table-card">
+        <div class="view-header" style="margin-bottom: 20px;">
+          <h2>Uploaded Programs Database</h2>
+          <p>View and manage all program courses published to your database.</p>
         </div>
-      </div>
-    </div>
-
-    <!-- Search Controls -->
-    <div class="controls-bar">
-      <div class="search-box">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="11" cy="11" r="8"></circle>
-          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-        </svg>
-        <input type="text" id="searchInput" class="search-input" placeholder="Search by name, email, or message content...">
-      </div>
-    </div>
-
-    <!-- Message List Container -->
-    <div class="responses-container" id="responsesContainer">
-      <!-- Loading State -->
-      <div class="loading-spinner" id="loadingSpinner">
-        <div class="spinner"></div>
-        <p>Fetching messages from Firestore...</p>
+        <div class="table-responsive">
+          <table class="program-table">
+            <thead>
+              <tr>
+                <th>Image</th>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="programsTableBody">
+              <tr>
+                <td colspan="5" class="table-loading">Loading programs...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
-    import { getFirestore, collection, onSnapshot, query, orderBy, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+    import { getFirestore, collection, onSnapshot, query, orderBy, doc, deleteDoc, addDoc } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 
     // Firebase configuration provided by the user
     const firebaseConfig = {
@@ -91,9 +243,277 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
+    // Force unregister service worker and clear caches to solve live server caching issues
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then((registrations) => {
+        for (let registration of registrations) {
+          registration.unregister().then(() => {
+            console.log("Service Worker unregistered successfully.");
+          });
+        }
+      });
+    }
+    if ('caches' in window) {
+      caches.keys().then((names) => {
+        for (let name of names) {
+          caches.delete(name).then(() => {
+            console.log("Cache cleared:", name);
+          });
+        }
+      });
+    }
+
+    // View Elements
+    const landingView = document.getElementById("landingView");
+    const notificationsView = document.getElementById("notificationsView");
+    const uploaderView = document.getElementById("uploaderView");
+
+    const showNotificationsBtn = document.getElementById("showNotificationsBtn");
+    const showUploaderBtn = document.getElementById("showUploaderBtn");
+    const backToPortalBtn = document.getElementById("backToPortalBtn");
+    const backToWebsiteLink = document.getElementById("backToWebsiteLink");
+    const brandTitle = document.getElementById("brandTitle");
+    const landingUnreadBadge = document.getElementById("landingUnreadBadge");
+
     const responsesContainer = document.getElementById("responsesContainer");
     const totalMessagesEl = document.getElementById("totalMessages");
     const searchInput = document.getElementById("searchInput");
+
+    // Dynamic views toggler
+    function switchView(viewName) {
+      if (viewName === 'landing') {
+        landingView.style.display = 'block';
+        notificationsView.style.display = 'none';
+        uploaderView.style.display = 'none';
+        
+        backToPortalBtn.style.display = 'none';
+        backToWebsiteLink.style.display = 'inline-flex';
+        brandTitle.innerHTML = 'Admin <span>Portal</span>';
+      } else if (viewName === 'notifications') {
+        landingView.style.display = 'none';
+        notificationsView.style.display = 'block';
+        uploaderView.style.display = 'none';
+        
+        backToPortalBtn.style.display = 'inline-flex';
+        backToWebsiteLink.style.display = 'none';
+        brandTitle.innerHTML = 'Contact <span>Responses</span>';
+      } else if (viewName === 'uploader') {
+        landingView.style.display = 'none';
+        notificationsView.style.display = 'none';
+        uploaderView.style.display = 'block';
+        
+        backToPortalBtn.style.display = 'inline-flex';
+        backToWebsiteLink.style.display = 'none';
+        brandTitle.innerHTML = 'Upload <span>Program Data</span>';
+        
+        resetUploaderForm();
+      }
+    }
+
+    showNotificationsBtn.addEventListener('click', () => switchView('notifications'));
+    showUploaderBtn.addEventListener('click', () => switchView('uploader'));
+    backToPortalBtn.addEventListener('click', () => switchView('landing'));
+
+    // Uploader File Reading Preview
+    const progImageFile = document.getElementById("progImageFile");
+    const previewImage = document.getElementById("previewImage");
+    const previewPlaceholder = document.querySelector(".preview-placeholder");
+    let base64ImageString = "";
+
+    progImageFile.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      const label = document.getElementById("fileNameLabel");
+      if (file) {
+        label.textContent = file.name;
+        label.style.color = "var(--text-main)";
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          base64ImageString = evt.target.result;
+          previewImage.src = base64ImageString;
+          previewImage.style.display = "block";
+          previewPlaceholder.style.display = "none";
+        };
+        reader.readAsDataURL(file);
+      } else {
+        label.textContent = "Choose Image File...";
+        label.style.color = "var(--text-muted)";
+        base64ImageString = "";
+        previewImage.src = "";
+        previewImage.style.display = "none";
+        previewPlaceholder.style.display = "block";
+      }
+    });
+
+    // Cloudinary upload function
+    async function uploadToCloudinary(file) {
+      const url = "https://api.cloudinary.com/v1_1/da6fjyirm/image/upload";
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", "jishadDb");
+
+      const response = await fetch(url, {
+        method: "POST",
+        body: formData
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error?.message || "Failed to upload image to Cloudinary.");
+      }
+
+      const data = await response.json();
+      return data.secure_url;
+    }
+
+    // Uploader Form Processing
+    const programForm = document.getElementById("programForm");
+    const uploaderFormFields = document.getElementById("uploaderFormFields");
+    const uploadSuccess = document.getElementById("uploadSuccess");
+    const uploadSubmitBtn = document.getElementById("uploadSubmitBtn");
+    const resetUploadBtn = document.getElementById("resetUploadBtn");
+
+    programForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const progTitle = document.getElementById("progTitle").value.trim();
+      const progCategory = document.getElementById("progCategory").value;
+      const progDate = document.getElementById("progDate").value;
+      const progDesc = document.getElementById("progDesc").value.trim();
+      const file = progImageFile.files[0];
+
+      if (!progTitle || !progCategory || !progDate || !progDesc || !file) {
+        alert("Please fill in all fields and choose a program cover image.");
+        return;
+      }
+
+      uploadSubmitBtn.disabled = true;
+      uploadSubmitBtn.textContent = "Uploading Image to Cloudinary...";
+
+      try {
+        // Step 1: Upload to Cloudinary
+        const imageUrl = await uploadToCloudinary(file);
+        
+        uploadSubmitBtn.textContent = "Saving Program Data to Firestore...";
+
+        // Step 2: Save to Firestore
+        await addDoc(collection(db, "programData"), {
+          title: progTitle,
+          category: progCategory,
+          date: progDate,
+          image: imageUrl,
+          description: progDesc,
+          timestamp: new Date().toISOString()
+        });
+        
+        uploaderFormFields.style.display = "none";
+        uploadSuccess.style.display = "flex";
+      } catch (err) {
+        console.error("Error saving program data:", err);
+        alert(err.message || "Failed to upload program data. Please check your connection.");
+      } finally {
+        uploadSubmitBtn.disabled = false;
+        uploadSubmitBtn.textContent = "Submit Program Data";
+      }
+    });
+
+    function resetUploaderForm() {
+      programForm.reset();
+      base64ImageString = "";
+      previewImage.src = "";
+      previewImage.style.display = "none";
+      previewPlaceholder.style.display = "block";
+      const label = document.getElementById("fileNameLabel");
+      if (label) {
+        label.textContent = "Choose Image File...";
+        label.style.color = "var(--text-muted)";
+      }
+      uploaderFormFields.style.display = "block";
+      uploadSuccess.style.display = "none";
+    }
+
+    resetUploadBtn.addEventListener('click', resetUploaderForm);
+
+    // Read program database list from Firestore
+    const programsTableBody = document.getElementById("programsTableBody");
+    const progQuery = query(collection(db, "programData"), orderBy("timestamp", "desc"));
+
+    onSnapshot(progQuery, (snapshot) => {
+      if (snapshot.empty) {
+        programsTableBody.innerHTML = `
+          <tr>
+            <td colspan="5" class="table-empty">No program entries found in the database. Use the form above to submit data.</td>
+          </tr>
+        `;
+        return;
+      }
+
+      programsTableBody.innerHTML = "";
+      snapshot.forEach((docSnapshot) => {
+        const prog = docSnapshot.data();
+        const progId = docSnapshot.id;
+        
+        const tr = document.createElement("tr");
+        
+        let displayDate = prog.date;
+        try {
+          if (prog.date) {
+            const d = new Date(prog.date);
+            displayDate = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+          }
+        } catch(e) {}
+
+        tr.innerHTML = `
+          <td class="col-img">
+            <img src="${prog.image || 'img/training.jpg'}" alt="${escapeHtml(prog.title)}" onerror="this.src='img/training.jpg'">
+          </td>
+          <td class="col-title font-medium">${escapeHtml(prog.title)}</td>
+          <td class="col-cat"><span class="table-badge">${escapeHtml(prog.category)}</span></td>
+          <td class="col-date">${escapeHtml(displayDate)}</td>
+          <td class="col-actions">
+            <button class="remove-btn" data-id="${progId}">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              </svg>
+              Remove
+            </button>
+          </td>
+        `;
+        programsTableBody.appendChild(tr);
+      });
+
+      // Bind remove actions
+      document.querySelectorAll(".col-actions .remove-btn").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          const docId = btn.getAttribute("data-id");
+          if (confirm("Are you sure you want to delete this program entry from the database?")) {
+            try {
+              btn.disabled = true;
+              btn.textContent = "Removing...";
+              await deleteDoc(doc(db, "programData", docId));
+            } catch (err) {
+              console.error("Error removing program:", err);
+              alert("Failed to delete program. Please check Firestore rules.");
+              btn.disabled = false;
+              btn.innerHTML = `
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
+                Remove
+              `;
+            }
+          }
+        });
+      });
+    }, (error) => {
+      console.error("Error fetching programs snapshot:", error);
+      programsTableBody.innerHTML = `
+        <tr>
+          <td colspan="5" class="table-error">Failed to load programs. Check security rules.</td>
+        </tr>
+      `;
+    });
 
     let allMessages = [];
 
@@ -230,6 +650,9 @@
       if (spinner) spinner.style.display = "none";
 
       totalMessagesEl.textContent = allMessages.length;
+      if (landingUnreadBadge) {
+        landingUnreadBadge.textContent = `${allMessages.length} Messages`;
+      }
 
       if (messagesToRender.length === 0) {
         responsesContainer.innerHTML = `
@@ -380,15 +803,6 @@
         pwaInstallBtn.style.display = 'none';
       }
     });
-
-    // Register Service Worker for PWA support
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js')
-          .then((reg) => console.log('Service Worker registered successfully from dashboard:', reg.scope))
-          .catch((err) => console.error('Service Worker registration failed from dashboard:', err));
-      });
-    }
   </script>
 </body>
 </html>

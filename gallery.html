@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gallery | Jishad Musthafa - Transformational Coach & Trainer</title>
+  <link rel="icon" type="image/png" href="faviocn.png">
+  <link rel="stylesheet" href="gallery.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-grotesk@400,500,600,700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Navigation Header -->
+  <header class="header">
+    <div class="header-container">
+      <a href="index.html" class="brand">
+        <img src="img/logo.png" alt="Jishad Musthafa Logo">
+      </a>
+      <a href="index.html" class="back-btn">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        Back to Home
+      </a>
+    </div>
+  </header>
+
+  <main class="gallery-wrapper">
+    <!-- Gallery Intro -->
+    <section class="intro-section">
+      <span class="label">Moments in Action</span>
+      <h1 class="title">Visualizing <span>Transformation</span></h1>
+      <p class="subtitle">A visual showcase of corporate workshops, executive mentoring sessions, and youth empowerment summits conducted by Jishad Musthafa.</p>
+    </section>
+
+    <!-- Filters Bar -->
+    <section class="filters-section">
+      <div class="filters-container">
+        <button class="filter-btn active" data-filter="all">All Photos</button>
+        <button class="filter-btn" data-filter="corporate">Corporate Training</button>
+        <button class="filter-btn" data-filter="leadership">Leadership Development</button>
+        <button class="filter-btn" data-filter="youth">Youth Empowerment</button>
+        <button class="filter-btn" data-filter="coaching">Executive Coaching</button>
+      </div>
+    </section>
+
+    <!-- Gallery Grid -->
+    <section class="grid-section">
+      <div class="gallery-grid" id="galleryGrid">
+        <div class="loading-state" style="grid-column: 1/-1; text-align: center; padding: 60px; color: var(--color-grey-light);">
+          Loading gallery from database...
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Lightbox Modal -->
+  <div class="lightbox" id="lightboxModal" aria-hidden="true" role="dialog">
+    <button class="close-btn" id="lightboxClose" aria-label="Close image popup">&times;</button>
+    <button class="nav-btn prev" id="lightboxPrev" aria-label="Previous image">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+    </button>
+    <div class="lightbox-content">
+      <img id="lightboxImage" src="" alt="">
+      <div class="lightbox-caption">
+        <span class="category" id="lightboxCategory">Category</span>
+        <h2 id="lightboxTitle">Image Title</h2>
+      </div>
+    </div>
+    <button class="nav-btn next" id="lightboxNext" aria-label="Next image">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
+    </button>
+  </div>
+
+  <footer class="footer">
+    <p>&copy; 2026 Jishad Musthafa. All rights reserved.</p>
+  </footer>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+    import { getFirestore, collection, onSnapshot, query, orderBy, doc, addDoc } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyAQPeQLh2IQbI7ooVdgqEDS-vW585xfjyk",
+      authDomain: "console-92a8b.firebaseapp.com",
+      projectId: "console-92a8b",
+      storageBucket: "console-92a8b.firebasestorage.app",
+      messagingSenderId: "100288837026",
+      appId: "1:100288837026:web:bdbca55cd6d6c047b7aefb",
+      measurementId: "G-HQHKX2QH5J"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Elements
+      const filterButtons = document.querySelectorAll('.filter-btn');
+      const lightbox = document.getElementById('lightboxModal');
+      const lightboxImg = document.getElementById('lightboxImage');
+      const lightboxTitle = document.getElementById('lightboxTitle');
+      const lightboxCategory = document.getElementById('lightboxCategory');
+      const lightboxClose = document.getElementById('lightboxClose');
+      const lightboxPrev = document.getElementById('lightboxPrev');
+      const lightboxNext = document.getElementById('lightboxNext');
+
+      let allPrograms = [];
+      let currentFilteredItems = [];
+      let activeIndex = 0;
+
+      // Filtering Logic
+      filterButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          filterButtons.forEach(b => b.classList.remove('active'));
+          e.target.classList.add('active');
+
+          const filterValue = e.target.getAttribute('data-filter');
+          const galleryItems = document.querySelectorAll('.gallery-item');
+          
+          currentFilteredItems = [];
+          galleryItems.forEach(item => {
+            const category = item.getAttribute('data-category');
+            if (filterValue === 'all' || category === filterValue) {
+              item.style.display = 'block';
+              setTimeout(() => {
+                item.style.opacity = '1';
+                item.style.transform = 'scale(1)';
+              }, 50);
+              currentFilteredItems.push(item);
+            } else {
+              item.style.opacity = '0';
+              item.style.transform = 'scale(0.92)';
+              setTimeout(() => {
+                item.style.display = 'none';
+              }, 300);
+            }
+          });
+
+          // Re-index displayed items
+          currentFilteredItems.forEach((item, index) => {
+            item.setAttribute('data-current-index', index);
+          });
+        });
+      });
+
+      // Render items to grid
+      function renderGallery(items) {
+        const grid = document.getElementById("galleryGrid");
+        grid.innerHTML = "";
+
+        if (items.length === 0) {
+          grid.innerHTML = `
+            <div class="empty-state" style="grid-column: 1/-1; text-align: center; padding: 60px; color: var(--color-grey-light);">
+              No gallery items found. Please upload items from the admin portal.
+            </div>
+          `;
+          return;
+        }
+
+        items.forEach((item, index) => {
+          const div = document.createElement("div");
+          div.className = "gallery-item";
+
+          // Dynamically check image aspect ratio to apply grid-spanning class
+          const tempImg = new Image();
+          tempImg.src = item.image || 'img/training.jpg';
+          tempImg.onload = () => {
+            if (tempImg.height > tempImg.width) {
+              div.classList.add("portrait-span");
+            }
+          };
+          
+          // Map category string to filter tag value
+          let catClass = "corporate";
+          if (item.category.includes("Leadership")) catClass = "leadership";
+          else if (item.category.includes("Youth")) catClass = "youth";
+          else if (item.category.includes("Coaching")) catClass = "coaching";
+
+          div.setAttribute("data-category", catClass);
+          div.setAttribute("data-current-index", index);
+
+          let displayDate = "";
+          try {
+            if (item.date) {
+              const d = new Date(item.date);
+              displayDate = d.toLocaleString('en-US', { month: 'short', year: 'numeric' });
+            }
+          } catch(e) {}
+
+          div.innerHTML = `
+            <div class="image-box">
+              <img src="${item.image || 'img/training.jpg'}" alt="${escapeHtml(item.title)}" onerror="this.src='img/training.jpg'">
+              <div class="hover-overlay">
+                <span class="category-badge">${escapeHtml(item.category)}</span>
+                <h3>${escapeHtml(item.title)}</h3>
+                <p class="date">${escapeHtml(displayDate)}</p>
+              </div>
+            </div>
+          `;
+
+          div.addEventListener('click', () => {
+            openLightbox(index);
+          });
+
+          grid.appendChild(div);
+        });
+      }
+
+      function openLightbox(index) {
+        activeIndex = index;
+        const currentItem = currentFilteredItems[activeIndex];
+        if (!currentItem) return;
+
+        const img = currentItem.querySelector('img');
+        const title = currentItem.querySelector('h3').textContent;
+        const category = currentItem.querySelector('.category-badge').textContent;
+
+        lightboxImg.src = img.src;
+        lightboxImg.alt = img.alt;
+        lightboxTitle.textContent = title;
+        lightboxCategory.textContent = category;
+
+        lightbox.classList.add('active');
+        lightbox.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeLightbox() {
+        lightbox.classList.remove('active');
+        lightbox.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+      }
+
+      lightboxClose.addEventListener('click', closeLightbox);
+      lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) {
+          closeLightbox();
+        }
+      });
+
+      function navigateLightbox(direction) {
+        if (direction === 'next') {
+          activeIndex = (activeIndex + 1) % currentFilteredItems.length;
+        } else {
+          activeIndex = (activeIndex - 1 + currentFilteredItems.length) % currentFilteredItems.length;
+        }
+        openLightbox(activeIndex);
+      }
+
+      lightboxNext.addEventListener('click', () => navigateLightbox('next'));
+      lightboxPrev.addEventListener('click', () => navigateLightbox('prev'));
+
+      window.addEventListener('keydown', (e) => {
+        if (!lightbox.classList.contains('active')) return;
+        if (e.key === 'Escape') closeLightbox();
+        if (e.key === 'ArrowRight') navigateLightbox('next');
+        if (e.key === 'ArrowLeft') navigateLightbox('prev');
+      });
+
+      // Escape raw HTML string
+      function escapeHtml(str) {
+        if (!str) return "";
+        return str
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+
+      // Live Snapshot listener from database
+      const progQuery = query(collection(db, "programData"), orderBy("date", "desc"));
+
+      onSnapshot(progQuery, (snapshot) => {
+        let items = [];
+        snapshot.forEach(doc => {
+          items.push(doc.data());
+        });
+
+        allPrograms = items;
+        renderGallery(allPrograms);
+
+        // Update elements list
+        const galleryItems = document.querySelectorAll('.gallery-item');
+        currentFilteredItems = Array.from(galleryItems);
+        currentFilteredItems.forEach((item, index) => {
+          item.setAttribute('data-current-index', index);
+        });
+
+        // Reset filter buttons active classes
+        filterButtons.forEach(b => b.classList.remove('active'));
+        const allBtn = document.querySelector('[data-filter="all"]');
+        if (allBtn) allBtn.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

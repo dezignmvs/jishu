@@ -285,11 +285,22 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// Register Service Worker for PWA support
+// Force unregister service worker and clear caches to solve live server caching issues
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js')
-      .then((reg) => console.log('Service Worker registered successfully:', reg.scope))
-      .catch((err) => console.error('Service Worker registration failed:', err));
+  navigator.serviceWorker.getRegistrations().then((registrations) => {
+    for (let registration of registrations) {
+      registration.unregister().then(() => {
+        console.log("Service Worker unregistered.");
+      });
+    }
+  });
+}
+if ('caches' in window) {
+  caches.keys().then((names) => {
+    for (let name of names) {
+      caches.delete(name).then(() => {
+        console.log("Cache cleared:", name);
+      });
+    }
   });
 }

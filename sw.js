@@ -1,10 +1,12 @@
-const CACHE_NAME = 'jishad-coach-cache-v1';
+const CACHE_NAME = 'jishad-coach-cache-v2';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
   './respons.html',
+  './gallery.html',
   './script.js',
   './responses.css',
+  './gallery.css',
   './faviocn.png',
   './img/logo.png',
   './img/logo-w.png'
