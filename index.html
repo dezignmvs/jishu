@@ -623,7 +623,7 @@
         }
 
         // Live Database Listener
-        const progQuery = query(collection(db, "programData"), orderBy("date", "desc"), limit(6));
+        const progQuery = query(collection(db, "programData"), orderBy("date", "desc"), limit(4));
         onSnapshot(progQuery, (snapshot) => {
           items = [];
           snapshot.forEach(doc => {
