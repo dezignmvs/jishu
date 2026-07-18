@@ -356,6 +356,20 @@
               Active</span>
           </div>
         </button>
+
+        <button id="showBlogUploaderBtn" class="portal-card-btn">
+          <div class="portal-card-icon" style="background: rgba(230, 145, 0, 0.08); color: #e69100;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 20h9"></path>
+              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+            </svg>
+          </div>
+          <div class="portal-card-info">
+            <h3>Upload Blog Post</h3>
+            <p>Publish new insights, ideas, and reflections to the blog.</p>
+            <span class="badge" style="background: rgba(230, 145, 0, 0.1); color: #e69100;">Console Active</span>
+          </div>
+        </button>
       </div>
     </div>
 
@@ -507,11 +521,116 @@
         </div>
       </div>
     </div>
+
+    <!-- Blog Uploader View -->
+    <div id="blogUploaderView" style="display: none;">
+      <div id="blogUploaderFormFields" class="uploader-card">
+        <div class="view-header">
+          <h2>Blog Post Details</h2>
+          <p>Publish a new insight or reflection to the blog.</p>
+        </div>
+        <form id="blogForm" class="uploader-form">
+          <div class="form-group">
+            <label for="blogTitle">Blog Title</label>
+            <input type="text" id="blogTitle" required placeholder="e.g. 5 Ways to Improve Leadership Skills">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="blogDate">Date</label>
+              <input type="date" id="blogDate" required>
+            </div>
+            <div class="form-group">
+              <label for="blogStatus">Status</label>
+              <select id="blogStatus" required>
+                <option value="Draft">Draft</option>
+                <option value="Published">Published</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 24px;">
+            <label for="blogContent">Blog Content</label>
+            <textarea id="blogContent" required placeholder="Write your blog post content here..." rows="6" style="width: 100%; border: 1px solid var(--border-color); border-radius: 8px; padding: 12px 16px; font-family: var(--font-sans); font-size: 15px; resize: vertical;"></textarea>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 24px;">
+            <label for="blogLink">Link (Optional)</label>
+            <input type="url" id="blogLink" placeholder="e.g. https://example.com" style="width: 100%; border: 1px solid var(--border-color); border-radius: 8px; padding: 12px 16px; font-family: var(--font-sans); font-size: 15px;">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="blogImageFile">Cover Image File (Optional)</label>
+              <div class="custom-file-upload">
+                <input type="file" id="blogImageFile" accept="image/*">
+                <div class="upload-trigger-content">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="17 8 12 3 7 8"></polyline>
+                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                  </svg>
+                  <span id="blogFileNameLabel">Choose Image File...</span>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Image Preview</label>
+              <div id="blogImagePreviewContainer" class="preview-box">
+                <span class="preview-placeholder">No image selected</span>
+                <img id="blogPreviewImage" src="" alt="Preview" style="display: none;">
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" class="submit-btn" id="blogUploadSubmitBtn">
+            Submit Blog Post
+          </button>
+        </form>
+      </div>
+
+      <div id="blogUploadSuccess" class="upload-success-state" style="display: none;">
+        <div class="success-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+        <h3>Blog Post Uploaded Successfully!</h3>
+        <p>The post has been published to your Firestore database system.</p>
+        <button id="blogResetUploadBtn" class="download-btn" style="margin-top: 10px;">Upload Another Post</button>
+      </div>
+
+      <!-- Database Table Section -->
+      <div class="table-card">
+        <div class="view-header" style="margin-bottom: 20px;">
+          <h2>Uploaded Blogs Database</h2>
+          <p>View and manage all blog posts published to your database.</p>
+        </div>
+        <div class="table-responsive">
+          <table class="program-table">
+            <thead>
+              <tr>
+                <th>Image</th>
+                <th>Title</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="blogsTableBody">
+              <tr>
+                <td colspan="5" class="table-loading">Loading blogs...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
-    import { getFirestore, collection, onSnapshot, query, orderBy, doc, deleteDoc, addDoc } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+    import { getFirestore, collection, onSnapshot, query, orderBy, doc, deleteDoc, addDoc, updateDoc } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 
     if (sessionStorage.getItem('admin_authenticated') === 'true') {
       // Firebase configuration provided by the user
@@ -553,9 +672,11 @@
       const landingView = document.getElementById("landingView");
       const notificationsView = document.getElementById("notificationsView");
       const uploaderView = document.getElementById("uploaderView");
+      const blogUploaderView = document.getElementById("blogUploaderView");
 
       const showNotificationsBtn = document.getElementById("showNotificationsBtn");
       const showUploaderBtn = document.getElementById("showUploaderBtn");
+      const showBlogUploaderBtn = document.getElementById("showBlogUploaderBtn");
       const backToPortalBtn = document.getElementById("backToPortalBtn");
       const backToWebsiteLink = document.getElementById("backToWebsiteLink");
       const logoutBtn = document.getElementById("logoutBtn");
@@ -572,6 +693,7 @@
           landingView.style.display = 'block';
           notificationsView.style.display = 'none';
           uploaderView.style.display = 'none';
+          blogUploaderView.style.display = 'none';
 
           backToPortalBtn.style.display = 'none';
           backToWebsiteLink.style.display = 'inline-flex';
@@ -580,6 +702,7 @@
           landingView.style.display = 'none';
           notificationsView.style.display = 'block';
           uploaderView.style.display = 'none';
+          blogUploaderView.style.display = 'none';
 
           backToPortalBtn.style.display = 'inline-flex';
           backToWebsiteLink.style.display = 'none';
@@ -588,17 +711,30 @@
           landingView.style.display = 'none';
           notificationsView.style.display = 'none';
           uploaderView.style.display = 'block';
+          blogUploaderView.style.display = 'none';
 
           backToPortalBtn.style.display = 'inline-flex';
           backToWebsiteLink.style.display = 'none';
           brandTitle.innerHTML = 'Upload <span>Program Data</span>';
 
           resetUploaderForm();
+        } else if (viewName === 'blogUploader') {
+          landingView.style.display = 'none';
+          notificationsView.style.display = 'none';
+          uploaderView.style.display = 'none';
+          blogUploaderView.style.display = 'block';
+
+          backToPortalBtn.style.display = 'inline-flex';
+          backToWebsiteLink.style.display = 'none';
+          brandTitle.innerHTML = 'Upload <span>Blog Post</span>';
+
+          if(typeof resetBlogUploaderForm === 'function') resetBlogUploaderForm();
         }
       }
 
       showNotificationsBtn.addEventListener('click', () => switchView('notifications'));
       showUploaderBtn.addEventListener('click', () => switchView('uploader'));
+      showBlogUploaderBtn.addEventListener('click', () => switchView('blogUploader'));
       backToPortalBtn.addEventListener('click', () => switchView('landing'));
 
       if (logoutBtn) {
@@ -809,6 +945,203 @@
           <td colspan="5" class="table-error">Failed to load programs. Check security rules.</td>
         </tr>
       `;
+      });
+
+      // Blog Uploader Logic
+      const blogImageFile = document.getElementById("blogImageFile");
+      const blogPreviewImage = document.getElementById("blogPreviewImage");
+      const blogPreviewPlaceholder = document.querySelector("#blogImagePreviewContainer .preview-placeholder");
+      let blogBase64ImageString = "";
+
+      blogImageFile.addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        const label = document.getElementById("blogFileNameLabel");
+        if (file) {
+          label.textContent = file.name;
+          label.style.color = "var(--text-main)";
+          const reader = new FileReader();
+          reader.onload = function (evt) {
+            blogBase64ImageString = evt.target.result;
+            blogPreviewImage.src = blogBase64ImageString;
+            blogPreviewImage.style.display = "block";
+            blogPreviewPlaceholder.style.display = "none";
+          };
+          reader.readAsDataURL(file);
+        } else {
+          label.textContent = "Choose Image File...";
+          label.style.color = "var(--text-muted)";
+          blogBase64ImageString = "";
+          blogPreviewImage.src = "";
+          blogPreviewImage.style.display = "none";
+          blogPreviewPlaceholder.style.display = "block";
+        }
+      });
+
+      const blogForm = document.getElementById("blogForm");
+      const blogUploaderFormFields = document.getElementById("blogUploaderFormFields");
+      const blogUploadSuccess = document.getElementById("blogUploadSuccess");
+      const blogUploadSubmitBtn = document.getElementById("blogUploadSubmitBtn");
+      const blogResetUploadBtn = document.getElementById("blogResetUploadBtn");
+
+      blogForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const blogTitle = document.getElementById("blogTitle").value.trim();
+        const blogDate = document.getElementById("blogDate").value;
+        const blogStatus = document.getElementById("blogStatus").value;
+        const blogContent = document.getElementById("blogContent").value.trim();
+        const blogLinkElement = document.getElementById("blogLink");
+        const blogLink = blogLinkElement ? blogLinkElement.value.trim() : "";
+        const file = blogImageFile.files[0];
+
+        if (!blogTitle || !blogDate || !blogStatus || !blogContent) {
+          alert("Please fill in all required fields.");
+          return;
+        }
+
+        blogUploadSubmitBtn.disabled = true;
+        
+        try {
+          let imageUrl = "";
+          if (file) {
+            blogUploadSubmitBtn.textContent = "Uploading Image to Cloudinary...";
+            imageUrl = await uploadToCloudinary(file);
+          }
+
+          blogUploadSubmitBtn.textContent = "Saving Blog Data to Firestore...";
+
+          await addDoc(collection(db, "blogData"), {
+            title: blogTitle,
+            date: blogDate,
+            status: blogStatus,
+            content: blogContent,
+            link: blogLink,
+            image: imageUrl,
+            timestamp: new Date().toISOString()
+          });
+
+          blogUploaderFormFields.style.display = "none";
+          blogUploadSuccess.style.display = "flex";
+        } catch (err) {
+          console.error("Error saving blog data:", err);
+          alert(err.message || "Failed to upload blog data.");
+        } finally {
+          blogUploadSubmitBtn.disabled = false;
+          blogUploadSubmitBtn.textContent = "Submit Blog Post";
+        }
+      });
+
+      function resetBlogUploaderForm() {
+        if(blogForm) blogForm.reset();
+        blogBase64ImageString = "";
+        if(blogPreviewImage) blogPreviewImage.src = "";
+        if(blogPreviewImage) blogPreviewImage.style.display = "none";
+        if(blogPreviewPlaceholder) blogPreviewPlaceholder.style.display = "block";
+        const label = document.getElementById("blogFileNameLabel");
+        if (label) {
+          label.textContent = "Choose Image File...";
+          label.style.color = "var(--text-muted)";
+        }
+        if(blogUploaderFormFields) blogUploaderFormFields.style.display = "block";
+        if(blogUploadSuccess) blogUploadSuccess.style.display = "none";
+      }
+
+      blogResetUploadBtn.addEventListener('click', resetBlogUploaderForm);
+
+      // Read blog database
+      const blogsTableBody = document.getElementById("blogsTableBody");
+      const blogQuery = query(collection(db, "blogData"), orderBy("timestamp", "desc"));
+
+      onSnapshot(blogQuery, (snapshot) => {
+        if (snapshot.empty) {
+          blogsTableBody.innerHTML = `
+          <tr>
+            <td colspan="5" class="table-empty">No blog entries found. Use the form above to submit data.</td>
+          </tr>
+        `;
+          return;
+        }
+
+        blogsTableBody.innerHTML = "";
+        snapshot.forEach((docSnapshot) => {
+          const blog = docSnapshot.data();
+          const blogId = docSnapshot.id;
+
+          const tr = document.createElement("tr");
+
+          let displayDate = blog.date;
+          try {
+            if (blog.date) {
+              const d = new Date(blog.date);
+              displayDate = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            }
+          } catch (e) { }
+
+          tr.innerHTML = `
+          <td class="col-img">
+            <img src="${blog.image || 'img/training.jpg'}" alt="${escapeHtml(blog.title)}" onerror="this.src='img/training.jpg'">
+          </td>
+          <td class="col-title font-medium">${escapeHtml(blog.title)}</td>
+          <td class="col-cat"><span class="table-badge">${escapeHtml(displayDate)}</span></td>
+          <td class="col-date">${escapeHtml(blog.status)}</td>
+          <td class="col-actions">
+            ${blog.status === 'Draft' ? `
+            <button class="publish-btn" data-id="${blogId}" style="margin-right: 8px; color: #2ecc71; border: 1px solid #2ecc71; padding: 4px 8px; border-radius: 4px; background: none; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; font-weight: 500; font-size: 13px;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;">
+                <path d="M5 12l5 5l10 -10"></path>
+              </svg>
+              Publish
+            </button>
+            ` : ''}
+            <button class="remove-btn" data-id="${blogId}">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              </svg>
+              Remove
+            </button>
+          </td>
+        `;
+          blogsTableBody.appendChild(tr);
+        });
+
+        document.querySelectorAll("#blogsTableBody .col-actions .publish-btn").forEach((btn) => {
+          btn.addEventListener("click", async () => {
+            const docId = btn.getAttribute("data-id");
+            if (confirm("Are you sure you want to publish this blog entry?")) {
+              try {
+                btn.disabled = true;
+                btn.textContent = "Publishing...";
+                await updateDoc(doc(db, "blogData", docId), {
+                  status: "Published"
+                });
+              } catch (err) {
+                console.error("Error publishing blog:", err);
+                alert("Failed to publish blog.");
+                btn.disabled = false;
+              }
+            }
+          });
+        });
+
+        document.querySelectorAll("#blogsTableBody .col-actions .remove-btn").forEach((btn) => {
+          btn.addEventListener("click", async () => {
+            const docId = btn.getAttribute("data-id");
+            if (confirm("Are you sure you want to delete this blog entry?")) {
+              try {
+                btn.disabled = true;
+                btn.textContent = "Removing...";
+                await deleteDoc(doc(db, "blogData", docId));
+              } catch (err) {
+                console.error("Error removing blog:", err);
+                alert("Failed to delete blog.");
+                btn.disabled = false;
+              }
+            }
+          });
+        });
+      }, (error) => {
+        console.error("Error fetching blogs snapshot:", error);
       });
 
       let allMessages = [];

@@ -14,5 +14,11 @@ service cloud.firestore {
       allow read: if true; // Anyone can read programs on the gallery view
       allow write: if true; // Admin console can create, update, and delete programs
     }
+
+    // Blog database
+    match /blogData/{document} {
+      allow read: if true;
+      allow write: if true;
+    }
   }
 }

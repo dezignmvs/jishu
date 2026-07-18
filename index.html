@@ -444,6 +444,32 @@
       </div>
     </section>
 
+    <!-- Blog Section -->
+    <section class="py-[60px] bg-white border-t border-black/5 overflow-hidden">
+      <div class="max-w-[1200px] mx-auto px-[50px] max-sm:px-[24px]">
+        <div class="mb-[40px] flex flex-col md:flex-row md:items-end justify-between gap-[20px]">
+          <div>
+            <span class="block text-[14px] text-[#7C7C7C] font-semibold mb-[8px] uppercase tracking-[0.15em]">Insights</span>
+            <h2 class="text-[44px] text-black font-semibold tracking-tight leading-[1.1] max-sm:text-[32px] font-sans">
+              Our Blog
+            </h2>
+          </div>
+          <div class="flex gap-[12px] font-sans">
+            <a href="blog.html" class="group inline-flex items-center justify-center gap-[10px] bg-black text-btnText font-medium text-[16px] px-[28px] h-[50px] rounded-[12px] border border-black hover:bg-brandYellow hover:text-black hover:-translate-y-[2px] transition-all duration-200 ease-smooth">
+              <span>View Full Blog</span>
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="transition-transform duration-200 group-hover:translate-x-[2px]">
+                <path d="M5 12h14M12 5l7 7-7 7"></path>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-[24px] max-md:grid-cols-1" id="blogContainerIndex">
+          <div class="text-[#7C7C7C] col-span-3">Loading blogs...</div>
+        </div>
+      </div>
+    </section>
+
     <!-- Slider Section -->
     <section class="py-[80px] bg-[#FAF9F5] border-t border-b border-black/5 overflow-hidden">
       <div class="max-w-[1200px] mx-auto px-[50px] max-sm:px-[24px]">
@@ -530,6 +556,29 @@
         </div>
       </div>
     </section>
+    <!-- Blog Modal -->
+    <div id="blogModal" class="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm hidden opacity-0 transition-opacity duration-300 flex items-center justify-center p-[20px]">
+      <div id="blogModalContent" class="bg-white w-full max-w-[800px] max-h-[90vh] rounded-[16px] shadow-2xl overflow-hidden flex flex-col transform scale-95 transition-transform duration-300">
+        <div class="relative h-[250px] md:h-[350px] w-full shrink-0">
+          <img id="modalImage" src="" alt="Blog Cover" class="w-full h-full object-cover">
+          <button id="closeModalBtn" class="absolute top-[16px] right-[16px] w-[40px] h-[40px] bg-black/50 hover:bg-black text-white rounded-full flex items-center justify-center transition-colors backdrop-blur-sm">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+        <div class="p-[30px] md:p-[40px] overflow-y-auto bg-[#FAF9F5]">
+          <div class="mb-[16px]">
+            <span id="modalDate" class="text-[14px] text-[#e67e22] font-semibold tracking-wider uppercase font-sans"></span>
+          </div>
+          <h2 id="modalTitle" class="text-[32px] md:text-[40px] font-semibold text-black leading-[1.1] mb-[24px] font-sans"></h2>
+          <div id="modalTextContent" class="text-[16px] md:text-[18px] text-[#4a4a4a] leading-[1.7] whitespace-pre-wrap font-sans"></div>
+          <div id="modalLinkContainer" class="mt-[32px] hidden">
+            <a id="modalLinkBtn" href="#" target="_blank" class="inline-flex items-center justify-center gap-[10px] bg-black text-btnText font-medium text-[16px] px-[28px] h-[50px] rounded-[12px] border border-black hover:bg-brandYellow hover:text-black hover:-translate-y-[2px] transition-all duration-200 ease-smooth">
+              Link
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
@@ -681,10 +730,116 @@
         });
       };
 
+      const initBlog = () => {
+        const blogContainer = document.getElementById('blogContainerIndex');
+        if (!blogContainer) return;
+        
+        const blogQuery = query(collection(db, "blogData"), orderBy("timestamp", "desc"), limit(3));
+        onSnapshot(blogQuery, (snapshot) => {
+          blogContainer.innerHTML = "";
+          if (snapshot.empty) {
+            blogContainer.innerHTML = `<div class="text-[#7C7C7C] col-span-3">No blogs found.</div>`;
+            return;
+          }
+          snapshot.forEach(doc => {
+            const blog = doc.data();
+            if (blog.status === 'Draft') return;
+            
+            let displayDate = blog.date;
+            try {
+              if (blog.date) {
+                const d = new Date(blog.date);
+                displayDate = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+              }
+            } catch (e) {}
+
+            const card = document.createElement("div");
+            card.className = "flex items-center bg-white border border-[#e0e0e0] rounded-[8px] overflow-hidden hover:shadow-md transition-shadow duration-200 cursor-pointer p-[12px] gap-[16px]";
+            card.innerHTML = `
+              <div class="w-[80px] h-[80px] rounded-[6px] overflow-hidden flex-shrink-0 border border-black/5">
+                <img src="${blog.image || 'img/training.jpg'}" alt="${escapeHtml(blog.title)}" class="w-full h-full object-cover">
+              </div>
+              <div class="flex flex-col flex-1 min-w-0">
+                <h4 class="text-[16px] font-medium text-black truncate mb-[4px] font-sans">${escapeHtml(blog.title)}</h4>
+                <div class="text-[13px] text-[#e67e22] font-medium font-sans">
+                  Published &bull; <span class="text-[#7f8c8d] font-normal">${escapeHtml(displayDate)}</span>
+                </div>
+              </div>
+            `;
+            
+            card.addEventListener('click', () => {
+              if (typeof openModal === 'function') openModal(blog, displayDate);
+            });
+            
+            blogContainer.appendChild(card);
+          });
+        });
+        
+        const blogModal = document.getElementById('blogModal');
+        const blogModalContent = document.getElementById('blogModalContent');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const modalImage = document.getElementById('modalImage');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalDate = document.getElementById('modalDate');
+        const modalTextContent = document.getElementById('modalTextContent');
+        const modalLinkContainer = document.getElementById('modalLinkContainer');
+        const modalLinkBtn = document.getElementById('modalLinkBtn');
+
+        function openModal(blog, displayDate) {
+          modalImage.src = blog.image || 'img/training.jpg';
+          modalTitle.textContent = blog.title || '';
+          modalDate.textContent = 'Published • ' + (displayDate || '');
+          modalTextContent.textContent = blog.content || 'No content provided.';
+          
+          if (blog.link) {
+            modalLinkBtn.href = blog.link;
+            modalLinkContainer.classList.remove('hidden');
+          } else {
+            modalLinkContainer.classList.add('hidden');
+            modalLinkBtn.href = '#';
+          }
+
+          blogModal.classList.remove('hidden');
+          void blogModal.offsetWidth;
+          blogModal.classList.remove('opacity-0');
+          blogModal.classList.add('opacity-100');
+          blogModalContent.classList.remove('scale-95');
+          blogModalContent.classList.add('scale-100');
+          document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+          blogModal.classList.remove('opacity-100');
+          blogModal.classList.add('opacity-0');
+          blogModalContent.classList.remove('scale-100');
+          blogModalContent.classList.add('scale-95');
+          setTimeout(() => {
+            blogModal.classList.add('hidden');
+            document.body.style.overflow = '';
+          }, 300);
+        }
+
+        if(closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
+        if(blogModal) blogModal.addEventListener('click', (e) => {
+          if (e.target === blogModal) closeModal();
+        });
+        
+        function escapeHtml(str) {
+          if (!str) return "";
+          return str
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+        }
+      };
+
       if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initSlider);
+        document.addEventListener('DOMContentLoaded', () => { initSlider(); initBlog(); });
       } else {
         initSlider();
+        initBlog();
       }
     </script>
 
