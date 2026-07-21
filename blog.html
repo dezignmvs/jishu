@@ -67,9 +67,10 @@
   <!-- Blog Modal -->
   <div id="blogModal" class="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm hidden opacity-0 transition-opacity duration-300 flex items-center justify-center p-[20px]">
     <div id="blogModalContent" class="bg-white w-full max-w-[800px] max-h-[90vh] rounded-[16px] shadow-2xl overflow-hidden flex flex-col transform scale-95 transition-transform duration-300">
-      <div class="relative h-[250px] md:h-[350px] w-full shrink-0">
-        <img id="modalImage" src="" alt="Blog Cover" class="w-full h-full object-cover">
-        <button id="closeModalBtn" class="absolute top-[16px] right-[16px] w-[40px] h-[40px] bg-black/50 hover:bg-black text-white rounded-full flex items-center justify-center transition-colors backdrop-blur-sm">
+      <div class="relative h-[280px] md:h-[400px] max-h-[50vh] w-full shrink-0 bg-black flex items-center justify-center overflow-hidden">
+        <img id="modalImage" src="" alt="Blog Cover" class="w-full h-full object-contain">
+        <video id="blogModalVideo" src="" controls class="w-full h-full object-contain hidden"></video>
+        <button id="closeModalBtn" class="absolute top-[16px] right-[16px] w-[40px] h-[40px] bg-black/50 hover:bg-black text-white rounded-full flex items-center justify-center transition-colors backdrop-blur-sm z-10">
           <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
         </button>
       </div>
@@ -80,9 +81,6 @@
         <h2 id="modalTitle" class="text-[32px] md:text-[40px] font-semibold text-black leading-[1.1] mb-[24px] font-sans"></h2>
         <div id="modalTextContent" class="text-[16px] md:text-[18px] text-[#4a4a4a] leading-[1.7] whitespace-pre-wrap font-sans"></div>
         <div id="modalLinkContainer" class="mt-[32px] hidden">
-          <a id="modalLinkBtn" href="#" target="_blank" class="inline-flex items-center justify-center gap-[10px] bg-black text-btnText font-medium text-[16px] px-[28px] h-[50px] rounded-[12px] border border-black hover:bg-brandYellow hover:text-black hover:-translate-y-[2px] transition-all duration-200 ease-smooth">
-            Link
-          </a>
         </div>
       </div>
     </div>
@@ -104,6 +102,12 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
+    function isVideoUrl(url, mediaType) {
+      if (mediaType === 'video') return true;
+      if (!url) return false;
+      return url.match(/\.(mp4|webm|ogg|mov)(\?.*)?$/i) || url.includes('/video/upload/');
+    }
+
     const initFullBlog = () => {
       const blogContainer = document.getElementById('blogContainerFull');
       if (!blogContainer) return;
@@ -112,7 +116,6 @@
       onSnapshot(blogQuery, (snapshot) => {
         blogContainer.innerHTML = "";
         
-        // Filter out drafts if we only want to show published ones (optional). We will show all for now, or just published.
         let blogs = [];
         snapshot.forEach(doc => {
           const blogData = doc.data();
@@ -135,11 +138,15 @@
             }
           } catch (e) {}
 
+          const isVid = isVideoUrl(blog.image, blog.mediaType);
+
           const card = document.createElement("div");
           card.className = "flex flex-col bg-white border border-[#e0e0e0] rounded-[16px] overflow-hidden hover:shadow-[0_8px_24px_rgba(0,0,0,0.06)] transition-shadow duration-300 cursor-pointer";
           card.innerHTML = `
-            <div class="aspect-[1.6] w-full overflow-hidden border-b border-black/5 relative">
-              <img src="${blog.image || 'img/training.jpg'}" alt="${escapeHtml(blog.title)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            <div class="aspect-[1.6] w-full overflow-hidden border-b border-black/5 relative bg-black">
+              ${isVid 
+                ? `<video src="${blog.image}" class="w-full h-full object-cover" muted loop playsinline autoplay></video>`
+                : `<img src="${blog.image || 'img/training.jpg'}" alt="${escapeHtml(blog.title)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">`}
               <div class="absolute top-[12px] right-[12px] bg-white/90 backdrop-blur-sm text-[12px] font-semibold px-[10px] py-[4px] rounded-full text-black shadow-sm">
                 ${escapeHtml(blog.status || 'Published')}
               </div>
@@ -166,28 +173,53 @@
       const blogModalContent = document.getElementById('blogModalContent');
       const closeModalBtn = document.getElementById('closeModalBtn');
       const modalImage = document.getElementById('modalImage');
+      const blogModalVideo = document.getElementById('blogModalVideo');
       const modalTitle = document.getElementById('modalTitle');
       const modalDate = document.getElementById('modalDate');
       const modalTextContent = document.getElementById('modalTextContent');
       const modalLinkContainer = document.getElementById('modalLinkContainer');
-      const modalLinkBtn = document.getElementById('modalLinkBtn');
 
       function openModal(blog, displayDate) {
-        modalImage.src = blog.image || 'img/training.jpg';
+        const isVid = isVideoUrl(blog.image, blog.mediaType);
+        if (isVid && blogModalVideo) {
+          modalImage.style.display = 'none';
+          blogModalVideo.src = blog.image;
+          blogModalVideo.classList.remove('hidden');
+        } else {
+          if (blogModalVideo) {
+            blogModalVideo.pause();
+            blogModalVideo.src = '';
+            blogModalVideo.classList.add('hidden');
+          }
+          modalImage.style.display = 'block';
+          modalImage.src = blog.image || 'img/training.jpg';
+        }
+
         modalTitle.textContent = blog.title || '';
         modalDate.textContent = 'Published • ' + (displayDate || '');
         modalTextContent.textContent = blog.content || 'No content provided.';
         
-        if (blog.link) {
-          modalLinkBtn.href = blog.link;
-          modalLinkContainer.classList.remove('hidden');
+        let linksToDisplay = [];
+        if (Array.isArray(blog.links) && blog.links.length > 0) {
+          linksToDisplay = blog.links;
+        } else if (blog.link) {
+          linksToDisplay = [{ url: blog.link, text: 'Link' }];
+        }
+
+        if (linksToDisplay.length > 0) {
+          modalLinkContainer.innerHTML = linksToDisplay.map(l => `
+            <a href="${escapeHtml(l.url)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-[8px] bg-black text-btnText font-medium text-[15px] px-[22px] h-[46px] rounded-[12px] border border-black hover:bg-brandYellow hover:text-black hover:-translate-y-[2px] transition-all duration-200 ease-smooth">
+              ${escapeHtml(l.text || 'Link')}
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+            </a>
+          `).join('');
+          modalLinkContainer.className = "mt-[32px] flex flex-wrap gap-[12px]";
         } else {
-          modalLinkContainer.classList.add('hidden');
-          modalLinkBtn.href = '#';
+          modalLinkContainer.className = "mt-[32px] hidden";
+          modalLinkContainer.innerHTML = "";
         }
 
         blogModal.classList.remove('hidden');
-        // trigger reflow
         void blogModal.offsetWidth;
         blogModal.classList.remove('opacity-0');
         blogModal.classList.add('opacity-100');
@@ -197,12 +229,14 @@
       }
 
       function closeModal() {
+        if (blogModalVideo) blogModalVideo.pause();
         blogModal.classList.remove('opacity-100');
         blogModal.classList.add('opacity-0');
         blogModalContent.classList.remove('scale-100');
         blogModalContent.classList.add('scale-95');
         setTimeout(() => {
           blogModal.classList.add('hidden');
+          if (blogModalVideo) blogModalVideo.src = '';
           document.body.style.overflow = '';
         }, 300);
       }

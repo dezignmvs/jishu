@@ -555,30 +555,42 @@
           </div>
 
           <div class="form-group" style="margin-bottom: 24px;">
-            <label for="blogLink">Link (Optional)</label>
-            <input type="url" id="blogLink" placeholder="e.g. https://example.com" style="width: 100%; border: 1px solid var(--border-color); border-radius: 8px; padding: 12px 16px; font-family: var(--font-sans); font-size: 15px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <label style="margin-bottom: 0;">Links (Optional)</label>
+              <button type="button" id="addBlogLinkBtn" style="background: rgba(34, 139, 230, 0.1); color: #228be6; border: 1px solid rgba(34, 139, 230, 0.3); padding: 4px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
+                + Add Another Link
+              </button>
+            </div>
+            <div id="blogLinksList" style="display: flex; flex-direction: column; gap: 10px;">
+              <div class="blog-link-row" style="display: flex; gap: 10px; align-items: center;">
+                <input type="url" class="blog-link-url" placeholder="Link URL (e.g. https://example.com)" style="flex: 2; border: 1px solid var(--border-color); border-radius: 8px; padding: 10px 14px; font-family: var(--font-sans); font-size: 14px;">
+                <input type="text" class="blog-link-text" placeholder="Button Text (e.g. Visit Link)" style="flex: 1.5; border: 1px solid var(--border-color); border-radius: 8px; padding: 10px 14px; font-family: var(--font-sans); font-size: 14px;">
+                <button type="button" class="remove-link-btn" style="background: rgba(240, 62, 62, 0.1); color: #f03e3e; border: 1px solid rgba(240, 62, 62, 0.2); width: 38px; height: 38px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 18px;" title="Remove link">&times;</button>
+              </div>
+            </div>
           </div>
 
           <div class="form-row">
             <div class="form-group">
-              <label for="blogImageFile">Cover Image File (Optional)</label>
+              <label for="blogImageFile">Cover Media File (Image or Video - Optional)</label>
               <div class="custom-file-upload">
-                <input type="file" id="blogImageFile" accept="image/*">
+                <input type="file" id="blogImageFile" accept="image/*,video/*">
                 <div class="upload-trigger-content">
                   <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                     <polyline points="17 8 12 3 7 8"></polyline>
                     <line x1="12" y1="3" x2="12" y2="15"></line>
                   </svg>
-                  <span id="blogFileNameLabel">Choose Image File...</span>
+                  <span id="blogFileNameLabel">Choose Image/Video File...</span>
                 </div>
               </div>
             </div>
             <div class="form-group">
-              <label>Image Preview</label>
+              <label>Media Preview</label>
               <div id="blogImagePreviewContainer" class="preview-box">
-                <span class="preview-placeholder">No image selected</span>
-                <img id="blogPreviewImage" src="" alt="Preview" style="display: none;">
+                <span class="preview-placeholder">No media selected</span>
+                <img id="blogPreviewImage" src="" alt="Preview" style="display: none; max-height: 200px; width: 100%; object-fit: cover; border-radius: 8px;">
+                <video id="blogPreviewVideo" src="" controls style="display: none; max-height: 200px; width: 100%; border-radius: 8px;"></video>
               </div>
             </div>
           </div>
@@ -776,9 +788,11 @@
         }
       });
 
-      // Cloudinary upload function
+      // Cloudinary upload function (supports images and videos)
       async function uploadToCloudinary(file) {
-        const url = "https://api.cloudinary.com/v1_1/da6fjyirm/image/upload";
+        const isVideo = file.type && file.type.startsWith('video');
+        const resourceType = isVideo ? 'video' : 'image';
+        const url = `https://api.cloudinary.com/v1_1/da6fjyirm/${resourceType}/upload`;
         const formData = new FormData();
         formData.append("file", file);
         formData.append("upload_preset", "jishadDb");
@@ -790,7 +804,7 @@
 
         if (!response.ok) {
           const errorData = await response.json();
-          throw new Error(errorData.error?.message || "Failed to upload image to Cloudinary.");
+          throw new Error(errorData.error?.message || `Failed to upload ${resourceType} to Cloudinary.`);
         }
 
         const data = await response.json();
@@ -947,11 +961,63 @@
       `;
       });
 
+      // Helper to check if URL/type is video
+      function isVideoUrl(url, mediaType) {
+        if (mediaType === 'video') return true;
+        if (!url) return false;
+        return url.match(/\.(mp4|webm|ogg|mov)(\?.*)?$/i) || url.includes('/video/upload/');
+      }
+
+      // Dynamic Blog Link Manager
+      const blogLinksList = document.getElementById("blogLinksList");
+      const addBlogLinkBtn = document.getElementById("addBlogLinkBtn");
+
+      function createLinkRow(urlVal = "", textVal = "") {
+        const row = document.createElement("div");
+        row.className = "blog-link-row";
+        row.style.cssText = "display: flex; gap: 10px; align-items: center;";
+        row.innerHTML = `
+          <input type="url" class="blog-link-url" placeholder="Link URL (e.g. https://example.com)" value="${escapeHtml(urlVal)}" style="flex: 2; border: 1px solid var(--border-color); border-radius: 8px; padding: 10px 14px; font-family: var(--font-sans); font-size: 14px;">
+          <input type="text" class="blog-link-text" placeholder="Button Text (e.g. Visit Link)" value="${escapeHtml(textVal)}" style="flex: 1.5; border: 1px solid var(--border-color); border-radius: 8px; padding: 10px 14px; font-family: var(--font-sans); font-size: 14px;">
+          <button type="button" class="remove-link-btn" style="background: rgba(240, 62, 62, 0.1); color: #f03e3e; border: 1px solid rgba(240, 62, 62, 0.2); width: 38px; height: 38px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 18px;" title="Remove link">&times;</button>
+        `;
+        row.querySelector(".remove-link-btn").addEventListener("click", () => {
+          if (blogLinksList.children.length > 1) {
+            row.remove();
+          } else {
+            row.querySelector(".blog-link-url").value = "";
+            row.querySelector(".blog-link-text").value = "";
+          }
+        });
+        return row;
+      }
+
+      if (addBlogLinkBtn) {
+        addBlogLinkBtn.addEventListener("click", () => {
+          blogLinksList.appendChild(createLinkRow());
+        });
+      }
+
+      if (blogLinksList) {
+        const initialRemoveBtn = blogLinksList.querySelector(".remove-link-btn");
+        if (initialRemoveBtn) {
+          initialRemoveBtn.addEventListener("click", (e) => {
+            const row = e.target.closest(".blog-link-row");
+            if (blogLinksList.children.length > 1) {
+              row.remove();
+            } else {
+              row.querySelector(".blog-link-url").value = "";
+              row.querySelector(".blog-link-text").value = "";
+            }
+          });
+        }
+      }
+
       // Blog Uploader Logic
       const blogImageFile = document.getElementById("blogImageFile");
       const blogPreviewImage = document.getElementById("blogPreviewImage");
+      const blogPreviewVideo = document.getElementById("blogPreviewVideo");
       const blogPreviewPlaceholder = document.querySelector("#blogImagePreviewContainer .preview-placeholder");
-      let blogBase64ImageString = "";
 
       blogImageFile.addEventListener("change", (e) => {
         const file = e.target.files[0];
@@ -959,21 +1025,31 @@
         if (file) {
           label.textContent = file.name;
           label.style.color = "var(--text-main)";
-          const reader = new FileReader();
-          reader.onload = function (evt) {
-            blogBase64ImageString = evt.target.result;
-            blogPreviewImage.src = blogBase64ImageString;
-            blogPreviewImage.style.display = "block";
-            blogPreviewPlaceholder.style.display = "none";
-          };
-          reader.readAsDataURL(file);
+          const url = URL.createObjectURL(file);
+          if (file.type.startsWith("video")) {
+            if (blogPreviewImage) blogPreviewImage.style.display = "none";
+            if (blogPreviewVideo) {
+              blogPreviewVideo.src = url;
+              blogPreviewVideo.style.display = "block";
+            }
+            if (blogPreviewPlaceholder) blogPreviewPlaceholder.style.display = "none";
+          } else {
+            if (blogPreviewVideo) {
+              blogPreviewVideo.src = "";
+              blogPreviewVideo.style.display = "none";
+            }
+            if (blogPreviewImage) {
+              blogPreviewImage.src = url;
+              blogPreviewImage.style.display = "block";
+            }
+            if (blogPreviewPlaceholder) blogPreviewPlaceholder.style.display = "none";
+          }
         } else {
-          label.textContent = "Choose Image File...";
+          label.textContent = "Choose Image/Video File...";
           label.style.color = "var(--text-muted)";
-          blogBase64ImageString = "";
-          blogPreviewImage.src = "";
-          blogPreviewImage.style.display = "none";
-          blogPreviewPlaceholder.style.display = "block";
+          if (blogPreviewImage) { blogPreviewImage.src = ""; blogPreviewImage.style.display = "none"; }
+          if (blogPreviewVideo) { blogPreviewVideo.src = ""; blogPreviewVideo.style.display = "none"; }
+          if (blogPreviewPlaceholder) blogPreviewPlaceholder.style.display = "block";
         }
       });
 
@@ -990,8 +1066,18 @@
         const blogDate = document.getElementById("blogDate").value;
         const blogStatus = document.getElementById("blogStatus").value;
         const blogContent = document.getElementById("blogContent").value.trim();
-        const blogLinkElement = document.getElementById("blogLink");
-        const blogLink = blogLinkElement ? blogLinkElement.value.trim() : "";
+        
+        // Gather all specified links with custom button text
+        const linkRows = document.querySelectorAll(".blog-link-row");
+        const links = [];
+        linkRows.forEach(row => {
+          const url = row.querySelector(".blog-link-url")?.value.trim();
+          const text = row.querySelector(".blog-link-text")?.value.trim();
+          if (url) {
+            links.push({ url: url, text: text || "Link" });
+          }
+        });
+
         const file = blogImageFile.files[0];
 
         if (!blogTitle || !blogDate || !blogStatus || !blogContent) {
@@ -1003,8 +1089,10 @@
         
         try {
           let imageUrl = "";
+          let mediaType = "image";
           if (file) {
-            blogUploadSubmitBtn.textContent = "Uploading Image to Cloudinary...";
+            mediaType = file.type.startsWith("video") ? "video" : "image";
+            blogUploadSubmitBtn.textContent = `Uploading ${mediaType === 'video' ? 'Video' : 'Image'} to Cloudinary...`;
             imageUrl = await uploadToCloudinary(file);
           }
 
@@ -1015,8 +1103,10 @@
             date: blogDate,
             status: blogStatus,
             content: blogContent,
-            link: blogLink,
+            links: links,
+            link: links.length > 0 ? links[0].url : "",
             image: imageUrl,
+            mediaType: mediaType,
             timestamp: new Date().toISOString()
           });
 
@@ -1033,13 +1123,16 @@
 
       function resetBlogUploaderForm() {
         if(blogForm) blogForm.reset();
-        blogBase64ImageString = "";
-        if(blogPreviewImage) blogPreviewImage.src = "";
-        if(blogPreviewImage) blogPreviewImage.style.display = "none";
+        if(blogLinksList) {
+          blogLinksList.innerHTML = "";
+          blogLinksList.appendChild(createLinkRow());
+        }
+        if(blogPreviewImage) { blogPreviewImage.src = ""; blogPreviewImage.style.display = "none"; }
+        if(blogPreviewVideo) { blogPreviewVideo.src = ""; blogPreviewVideo.style.display = "none"; }
         if(blogPreviewPlaceholder) blogPreviewPlaceholder.style.display = "block";
         const label = document.getElementById("blogFileNameLabel");
         if (label) {
-          label.textContent = "Choose Image File...";
+          label.textContent = "Choose Image/Video File...";
           label.style.color = "var(--text-muted)";
         }
         if(blogUploaderFormFields) blogUploaderFormFields.style.display = "block";
@@ -1077,9 +1170,13 @@
             }
           } catch (e) { }
 
+          const isVid = isVideoUrl(blog.image, blog.mediaType);
+
           tr.innerHTML = `
           <td class="col-img">
-            <img src="${blog.image || 'img/training.jpg'}" alt="${escapeHtml(blog.title)}" onerror="this.src='img/training.jpg'">
+            ${isVid 
+              ? `<video src="${blog.image}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 6px;" muted></video>`
+              : `<img src="${blog.image || 'img/training.jpg'}" alt="${escapeHtml(blog.title)}" onerror="this.src='img/training.jpg'">`}
           </td>
           <td class="col-title font-medium">${escapeHtml(blog.title)}</td>
           <td class="col-cat"><span class="table-badge">${escapeHtml(displayDate)}</span></td>
