@@ -431,6 +431,8 @@
     </section>
   </main>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
     import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
@@ -671,11 +673,48 @@
     });
 
     document.getElementById("restartButton").addEventListener("click", () => location.reload());
-    document.getElementById("downloadResult").addEventListener("click", () => {
-      const originalTitle = document.title;
-      document.title = "BtheU Speaking Potential Snapshot";
-      window.print();
-      document.title = originalTitle;
+    document.getElementById("downloadResult").addEventListener("click", async () => {
+      const button = document.getElementById("downloadResult");
+      const actions = document.querySelector(".next-actions");
+      const restartButton = document.getElementById("restartButton");
+      button.disabled = true;
+      button.textContent = "Preparing PDF…";
+      actions.style.display = "none";
+      restartButton.style.display = "none";
+
+      try {
+        const report = document.getElementById("resultStage");
+        const canvas = await window.html2canvas(report, {
+          scale: 2,
+          useCORS: true,
+          backgroundColor: "#ffffff",
+          scrollX: 0,
+          scrollY: -window.scrollY,
+          windowWidth: Math.max(document.documentElement.clientWidth, report.scrollWidth)
+        });
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF("p", "mm", "a4");
+        const margin = 8;
+        const pageWidth = pdf.internal.pageSize.getWidth() - margin * 2;
+        const pageHeight = pdf.internal.pageSize.getHeight() - margin * 2;
+        const sliceHeight = Math.floor(pageHeight * canvas.width / pageWidth);
+
+        for (let y = 0, page = 0; y < canvas.height; y += sliceHeight, page++) {
+          const height = Math.min(sliceHeight, canvas.height - y);
+          const slice = document.createElement("canvas");
+          slice.width = canvas.width;
+          slice.height = height;
+          slice.getContext("2d").drawImage(canvas, 0, y, canvas.width, height, 0, 0, canvas.width, height);
+          if (page) pdf.addPage();
+          pdf.addImage(slice.toDataURL("image/jpeg", 0.98), "JPEG", margin, margin, pageWidth, height * pageWidth / canvas.width);
+        }
+        pdf.save("BtheU-Speaking-Potential-Snapshot.pdf");
+      } finally {
+        actions.style.display = "";
+        restartButton.style.display = "";
+        button.disabled = false;
+        button.textContent = "↓ Download Result";
+      }
     });
   </script>
 </body>

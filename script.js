@@ -23,13 +23,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const modalSuccessState = document.getElementById('modalSuccessState');
   const closeSuccessBtn = document.getElementById('closeSuccessBtn');
   const submitFormBtn = document.getElementById('submitFormBtn');
-  const testChooserBtn = document.getElementById('testChooserBtn');
+  const snapshotBtn = document.getElementById('headerBookBtn');
   const testChooserModal = document.getElementById('testChooserModal');
   const testChooserClose = document.getElementById('testChooserClose');
   
   // Triggers to open the modal
   const openModalTriggers = [
-    document.getElementById('headerBookBtn'),
     document.getElementById('heroConsultBtn'),
     document.getElementById('aboutConnectBtn')
   ];
@@ -55,11 +54,11 @@ document.addEventListener('DOMContentLoaded', () => {
     testChooserModal.classList.remove('active');
     testChooserModal.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
-    testChooserBtn.focus();
+    snapshotBtn.focus();
   };
 
-  if (testChooserBtn && testChooserModal && testChooserClose) {
-    testChooserBtn.addEventListener('click', openTestChooser);
+  if (snapshotBtn && testChooserModal && testChooserClose) {
+    snapshotBtn.addEventListener('click', openTestChooser);
     testChooserClose.addEventListener('click', closeTestChooser);
     testChooserModal.addEventListener('click', (event) => {
       if (event.target === testChooserModal) closeTestChooser();
