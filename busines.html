@@ -1,0 +1,838 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Business Clarity &amp; Growth Diagnostic | BtheYou</title>
+    <meta name="description"
+        content="Discover how leadership, people, communication, customers and execution may be shaping your business performance.">
+    <link rel="icon" href="faviocn.png">
+    <link rel="preconnect" href="https://api.fontshare.com">
+    <link href="https://api.fontshare.com/v2/css?f[]=clash-grotesk@400,500,600,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #ffc20d;
+            --ink: #171820;
+            --muted: #68707d;
+            --line: #e1e2e5;
+            --paper: #faf9f5;
+            --soft: #fff5cc
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        html {
+            scroll-behavior: smooth
+        }
+
+        body {
+            margin: 0;
+            background: var(--paper);
+            color: var(--ink);
+            font-family: "Inter", sans-serif
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        .brand,
+        button {
+            font-family: "Clash Grotesk", "Inter", sans-serif
+        }
+
+        button,
+        a {
+            transition: .2s ease
+        }
+
+        .wrap {
+            width: min(1120px, calc(100% - 40px));
+            margin: auto
+        }
+
+        .site-head {
+            border-bottom: 1px solid var(--line);
+            background: #fff
+        }
+
+        .site-head .wrap {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 19px 0
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            font-size: 19px;
+            font-weight: 600
+        }
+
+        .brand i {
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+            background: var(--gold)
+        }
+
+        .head-label {
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .14em;
+            text-transform: uppercase
+        }
+
+        .hero {
+            display: grid;
+            grid-template-columns: 1.08fr .92fr;
+            align-items: center;
+            gap: 70px;
+            padding: 68px 0 85px
+        }
+
+        .eyebrow {
+            display: inline-block;
+            padding: 7px 13px;
+            border: 1px solid #ead995;
+            border-radius: 99px;
+            background: #fff9df;
+            color: #8c6500;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .12em;
+            text-transform: uppercase
+        }
+
+        .hero h1 {
+            margin: 22px 0 0;
+            font-size: clamp(43px, 5vw, 65px);
+            line-height: 1.03;
+            letter-spacing: -.04em
+        }
+
+        .italic {
+            margin: 19px 0 0;
+            font: italic 500 18px "Clash Grotesk";
+            color: #505761
+        }
+
+        .hero-copy {
+            max-width: 600px;
+            margin: 18px 0 0;
+            color: var(--muted);
+            font-size: 17px;
+            line-height: 1.7
+        }
+
+        .cta,
+        .next {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 28px;
+            padding: 15px 25px;
+            border: 0;
+            border-radius: 99px;
+            background: var(--gold);
+            color: #111;
+            text-decoration: none;
+            font-weight: 700;
+            cursor: pointer
+        }
+
+        .cta:hover,
+        .next:hover {
+            background: #111;
+            color: #fff;
+            transform: translateY(-2px)
+        }
+
+        .portrait {
+            position: relative;
+            padding: 16px;
+            border-radius: 30px;
+            background: #fff0b8
+        }
+
+        .portrait img {
+            display: block;
+            width: 100%;
+            height: 480px;
+            border-radius: 22px;
+            object-fit: cover;
+            object-position: center 22%
+        }
+
+        .portrait figcaption {
+            padding: 16px 2px 0;
+            font-weight: 700
+        }
+
+        .time {
+            position: absolute;
+            left: -22px;
+            bottom: 55px;
+            padding: 14px 18px;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            background: #fff;
+            box-shadow: 0 12px 28px #1112
+        }
+
+        .time strong {
+            display: block;
+            font-size: 21px
+        }
+
+        .discover {
+            padding: 70px 0
+        }
+
+        .section-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+            gap: 30px
+        }
+
+        .section-head h2 {
+            margin: 0;
+            font-size: 37px
+        }
+
+        .section-head p {
+            max-width: 420px;
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.5
+        }
+
+        .areas {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 14px;
+            margin-top: 36px
+        }
+
+        .area {
+            padding: 23px;
+            border: 1px solid var(--line);
+            border-radius: 17px;
+            background: #fff
+        }
+
+        .area span {
+            color: #a67500;
+            font-weight: 700
+        }
+
+        .area h3 {
+            margin: 10px 0 7px;
+            font-size: 17px
+        }
+
+        .area p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.55
+        }
+
+        .logic {
+            padding: 60px 0;
+            background: #171820;
+            color: #fff
+        }
+
+        .logic h2 {
+            max-width: 700px;
+            margin: 8px 0;
+            font-size: 35px
+        }
+
+        .logic p {
+            color: #c5c7cc
+        }
+
+        .flow {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 9px;
+            align-items: center;
+            margin-top: 27px
+        }
+
+        .flow span {
+            padding: 9px 14px;
+            border: 1px solid #ffffff55;
+            border-radius: 99px;
+            font-size: 12px;
+            font-weight: 700
+        }
+
+        .wizard {
+            min-height: 100vh;
+            padding-bottom: 70px;
+            background: #fff
+        }
+
+        .wizard-box {
+            max-width: 760px;
+            margin: auto;
+            padding: 50px 22px
+        }
+
+        .progress-meta {
+            display: flex;
+            justify-content: space-between;
+            color: var(--muted);
+            font-size: 12px
+        }
+
+        .track {
+            height: 7px;
+            margin-top: 10px;
+            border-radius: 99px;
+            background: #eee
+        }
+
+        .fill {
+            height: 100%;
+            width: 0;
+            border-radius: inherit;
+            background: var(--gold)
+        }
+
+        .step-card {
+            margin-top: 36px
+        }
+
+        .step-no {
+            color: #9b7000;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .12em;
+            text-transform: uppercase
+        }
+
+        .step-card h2 {
+            margin: 10px 0 7px;
+            font-size: 30px
+        }
+
+        .helper {
+            margin: 0 0 25px;
+            color: var(--muted);
+            font-size: 13px
+        }
+
+        .choices {
+            display: grid;
+            gap: 11px
+        }
+
+        .choices.grid {
+            grid-template-columns: 1fr 1fr
+        }
+
+        .choice {
+            padding: 17px;
+            border: 1px solid var(--line);
+            border-radius: 15px;
+            background: #fff;
+            text-align: left;
+            cursor: pointer
+        }
+
+        .choice:hover {
+            border-color: #d3a800;
+            transform: translateY(-2px)
+        }
+
+        .choice.selected {
+            border-color: #b88a00;
+            background: var(--soft);
+            box-shadow: 0 0 0 3px #ffc20d22
+        }
+
+        .choice strong {
+            display: block;
+            font-size: 16px
+        }
+
+        .choice small {
+            display: block;
+            margin-top: 5px;
+            color: var(--muted);
+            line-height: 1.45
+        }
+
+        .pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 9px
+        }
+
+        .pill {
+            padding: 10px 14px;
+            border: 1px solid var(--line);
+            border-radius: 99px;
+            background: #fff;
+            cursor: pointer
+        }
+
+        .pill.selected {
+            border-color: #111;
+            background: #111;
+            color: #fff
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 35px
+        }
+
+        .back {
+            border: 0;
+            background: none;
+            color: var(--muted);
+            cursor: pointer
+        }
+
+        .next {
+            margin: 0
+        }
+
+        .next:disabled {
+            opacity: .3;
+            cursor: not-allowed;
+            transform: none
+        }
+
+        .analyze {
+            text-align: center;
+            padding: 50px 0
+        }
+
+        .spinner {
+            width: 54px;
+            height: 54px;
+            margin: auto;
+            border: 3px solid #f5df82;
+            border-top-color: #111;
+            border-radius: 50%;
+            animation: spin .8s linear infinite
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg)
+            }
+        }
+
+        .report {
+            max-width: 900px;
+            margin: auto;
+            padding: 55px 22px 80px
+        }
+
+        .report h1 {
+            font-size: 39px
+        }
+
+        .lead {
+            max-width: 690px;
+            color: var(--muted);
+            line-height: 1.65
+        }
+
+        .compare,
+        .priority,
+        .fix,
+        .road-card {
+            padding: 22px;
+            border: 1px solid var(--line);
+            border-radius: 17px;
+            background: #fff
+        }
+
+        .compare {
+            margin: 28px 0
+        }
+
+        .compare-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px
+        }
+
+        .label {
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .1em;
+            text-transform: uppercase
+        }
+
+        .compare h3 {
+            margin: 6px 0
+        }
+
+        .gold {
+            color: #9c7000
+        }
+
+        .scores {
+            display: grid;
+            gap: 14px
+        }
+
+        .score-head {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px
+        }
+
+        .score-track {
+            height: 8px;
+            margin-top: 6px;
+            border-radius: 99px;
+            background: #eee
+        }
+
+        .score-bar {
+            height: 100%;
+            border-radius: inherit;
+            background: var(--gold)
+        }
+
+        .priorities {
+            display: grid;
+            gap: 13px
+        }
+
+        .priority .rank {
+            color: #9c7000;
+            font-size: 11px;
+            font-weight: 700
+        }
+
+        .priority h3 {
+            margin: 6px 0
+        }
+
+        .priority p {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.55
+        }
+
+        .fix {
+            margin-top: 32px;
+            background: #171820;
+            color: #fff
+        }
+
+        .fix p,
+        .fix li {
+            color: #d5d7dc;
+            line-height: 1.55
+        }
+
+        .roadmap {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 35px
+        }
+
+        .actions button,
+        .actions a {
+            flex: 1;
+            padding: 14px;
+            border: 1px solid #111;
+            border-radius: 99px;
+            background: #fff;
+            color: #111;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 700;
+            cursor: pointer
+        }
+
+        .actions .primary {
+            background: var(--gold);
+            border-color: var(--gold)
+        }
+
+        .hidden {
+            display: none !important
+        }
+
+        .notice {
+            min-height: 20px;
+            color: #a22;
+            font-size: 12px
+        }
+
+        @media(max-width:850px) {
+            .hero {
+                grid-template-columns: 1fr
+            }
+
+            .portrait {
+                max-width: 440px;
+                margin: auto
+            }
+
+            .areas {
+                grid-template-columns: 1fr 1fr
+            }
+
+            .section-head {
+                display: block
+            }
+
+            .section-head p {
+                margin-top: 12px
+            }
+
+            .time {
+                left: 10px
+            }
+
+            .choices.grid {
+                grid-template-columns: 1fr
+            }
+        }
+
+        @media(max-width:520px) {
+            .wrap {
+                width: min(100% - 28px, 1120px)
+            }
+
+            .head-label {
+                display: none
+            }
+
+            .hero {
+                padding-top: 42px;
+                gap: 35px
+            }
+
+            .portrait img {
+                height: 420px
+            }
+
+            .areas,
+            .compare-grid,
+            .roadmap {
+                grid-template-columns: 1fr
+            }
+
+            .wizard-box,
+            .report {
+                padding-left: 15px;
+                padding-right: 15px
+            }
+
+            .step-card h2 {
+                font-size: 25px
+            }
+        }
+
+        @media print {
+
+            .site-head,
+            .actions {
+                display: none !important
+            }
+
+            .report {
+                padding: 0;
+                max-width: none
+            }
+
+            .priority,
+            .road-card,
+            .compare,
+            .fix {
+                break-inside: avoid
+            }
+
+            body {
+                background: #fff
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="site-head">
+        <div class="wrap">
+            <div class="brand"><i></i>BtheYou</div><span class="head-label">Business Clarity &amp; Growth
+                Diagnostic</span>
+        </div>
+    </header>
+    <main id="landing">
+        <section class="wrap hero">
+            <div><span class="eyebrow">BtheYou · Business Diagnostic</span>
+                <h1>How much do you<br>know your business?</h1>
+                <p class="italic">Your business may be telling you something you haven’t noticed yet.</p>
+                <p class="hero-copy">Take a 5–7 minute Business Clarity &amp; Growth Diagnostic to discover how your
+                    leadership, people, communication, customers, sales and execution may be influencing your business
+                    performance.</p><button class="cta start">Start My Business Diagnostic →</button>
+                <p class="helper">No right or wrong answers. Answer based on your real business.</p>
+            </div>
+            <figure class="portrait"><img src="img/jishad.jpg" alt="Jishad Musthafa">
+                <figcaption>Jishad Musthafa · Corporate Trainer &amp; Business Consultant</figcaption>
+                <div class="time"><strong>5–7 min</strong><small>Private &amp; confidential</small></div>
+            </figure>
+        </section>
+        <section class="wrap discover">
+            <div class="section-head">
+                <h2>You’ll discover</h2>
+                <p>Five areas the diagnostic looks at before it draws any conclusion about your business.</p>
+            </div>
+            <div class="areas" id="areas"></div>
+        </section>
+        <section class="logic">
+            <div class="wrap"><span class="label">Not another quiz</span>
+                <h2>This diagnostic follows the same logic a consultant would use.</h2>
+                <p>A stated problem is treated as a symptom worth tracing — not the final word.</p>
+                <div class="flow"><span>Symptom</span>→<span>Evidence</span>→<span>Root Cause</span>→<span>Business
+                        Impact</span>→<span>Priority</span>→<span>Intervention</span></div>
+            </div>
+        </section>
+    </main>
+    <main id="wizard" class="wizard hidden">
+        <div class="wizard-box">
+            <div class="progress-meta"><span>Business Diagnostic</span><span id="progressLabel"></span></div>
+            <div class="track">
+                <div class="fill" id="fill"></div>
+            </div>
+            <section class="step-card" id="stepCard"></section>
+            <nav class="nav"><button class="back" id="back">← Back</button><button class="next" id="next">Next
+                    →</button></nav>
+        </div>
+    </main>
+    <main id="report" class="report hidden"><span class="eyebrow">Your business snapshot is ready</span>
+        <h1 id="level"></h1>
+        <p class="lead" id="levelText"></p>
+        <section class="compare">
+            <div class="compare-grid">
+                <div><span class="label">You identified</span>
+                    <h3 id="perceived"></h3>
+                </div>
+                <div><span class="label">Your responses suggest</span>
+                    <h3 class="gold" id="finding"></h3>
+                </div>
+            </div>
+            <p class="lead" id="comparison"></p>
+        </section>
+        <h2>Your diagnostic snapshot</h2>
+        <div class="scores" id="scores"></div>
+        <h2>Your top 3 priorities</h2>
+        <div class="priorities" id="priorities"></div>
+        <section class="fix"><span class="label">If you fix only one thing first</span>
+            <h2 id="fixName"></h2>
+            <ul id="fixReasons"></ul>
+        </section>
+        <h2>Your 90-day roadmap</h2>
+        <div class="roadmap" id="roadmap"></div>
+        <section style="margin-top:50px;padding-top:30px;border-top:1px solid var(--line);text-align:center">
+            <h2>BtheYou</h2>
+            <p>Business transformation begins with you.</p>
+            <p class="helper">This is an indicative business-development diagnostic based on your responses — not a financial, clinical or legal assessment.</p>
+        </section>
+        <div class="actions"><button id="download">↓ Download Result</button><a class="primary" id="whatsapp"
+                target="_blank" rel="noopener">Discuss My Business Diagnostic</a><button id="restart">Take
+                Back to home</button></div>
+    </main>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js"; import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+        const db = getFirestore(initializeApp({ apiKey: "AIzaSyAQPeQLh2IQbI7ooVdgqEDS-vW585xfjyk", authDomain: "console-92a8b.firebaseapp.com", projectId: "console-92a8b", storageBucket: "console-92a8b.firebasestorage.app", messagingSenderId: "100288837026", appId: "1:100288837026:web:bdbca55cd6d6c047b7aefb" }));
+        const areas = [["Business Clarity", "How clearly you understand where your business actually stands."], ["Leadership", "How leadership influences performance day to day."], ["People & Management", "Where team capability helps or limits execution."], ["Customers & Revenue", "What influences sales, relationships and growth."], ["Execution & Future Readiness", "How plans become measurable results."]];
+        document.querySelector("#areas").innerHTML = areas.map((a, i) => `<article class="area"><span>0${i + 1}</span><h3>${a[0]}</h3><p>${a[1]}</p></article>`).join("");
+        const paths = [["sme", "Small & Medium Business", "SMEs, family businesses, startups and owner-led businesses"], ["large", "Growing / Large Organization", "Established, multi-department and regional organizations"], ["edtech", "EdTech / Knowledge Business", "Education, training, coaching and consulting businesses"], ["other", "Not Sure / Other", "A general pathway adjusted by your answers"]];
+        const roles = ["Founder", "Co-Founder", "CEO", "Managing Director", "General Manager", "Business Owner", "Director", "Senior Manager", "Department Head", "HR / L&D", "Sales Leader", "Operations Leader", "Other"];
+        const sizes = ["1–10", "11–25", "26–50", "51–100", "101–250", "251–500", "500+"], ages = ["Less than 2 years", "2–5 years", "6–10 years", "11–20 years", "20+ years"], industries = ["Education", "EdTech", "Training", "Consulting", "Retail", "Healthcare", "Technology", "Construction", "Real Estate", "Hospitality", "Professional Services", "Manufacturing", "Finance", "Logistics", "Food & Beverage", "Other"];
+        const challenges = ["Revenue growth", "Sales performance", "Profitability", "Employee performance", "Leadership capability", "Manager effectiveness", "Communication", "Accountability", "Customer retention", "Customer experience", "Productivity", "Team collaboration", "Business owner dependency", "Scaling the business", "Strategic execution", "Employee engagement", "Talent development", "Personal branding", "Executive presence", "AI adoption", "Digital transformation", "Other"];
+        const questions = [
+            { id: "q1", d: "clarity", p: "If you asked your leadership team to name the organization’s top three priorities for the next 12 months, how likely is it that they would give the same answer?", o: ["Very likely", "Likely", "Somewhat likely", "Unlikely", "Very unlikely"] },
+            { id: "q2", d: "leadership", p: "A manager repeatedly misses an important performance target. What usually happens?", o: ["A structured improvement plan is followed", "A clear improvement plan is created", "The manager is reminded informally", "The issue is discussed but rarely followed up", "It depends on who the manager is"] },
+            { id: "q3", d: "people", p: "When a key employee is absent, how much does their absence disrupt normal operations?", o: ["Barely at all", "A little", "Noticeably", "Significantly", "Operations rely heavily on specific people"] },
+            { id: "q4", d: "sales", p: "When a potential customer does not buy, how clearly does your organization understand why?", o: ["Very clearly", "Usually", "Sometimes", "Rarely", "Almost never"] },
+            { id: "q5", d: "execution", p: "How often do important initiatives start strongly but lose momentum after the initial enthusiasm?", o: ["Rarely", "Occasionally", "Sometimes", "Often", "Almost always"] },
+            { id: "q6", d: "culture", p: "A high-performing employee is technically excellent but difficult for others to work with. What usually happens?", o: ["It is addressed directly with clear expectations", "A clear conversation happens but follow-up varies", "A quiet word is had, then dropped", "The team absorbs the friction", "It is overlooked because of results"] },
+            { id: "q7", d: "brand", p: "How comfortable are you representing your company publicly — media, stage, or client meetings?", o: ["Very comfortable", "Comfortable", "Somewhat comfortable", "Not very comfortable", "Not at all"] },
+            { id: "q8", d: "scale", p: "If your business doubled in size within 24 months, how confident are you that current leadership, people and systems could handle the growth?", o: ["Very confident", "Confident", "Somewhat confident", "Not very confident", "Not confident at all"] }];
+        const gaps = ["Leadership", "People", "Management", "Sales", "Communication", "Execution", "Customer experience", "Strategy", "Systems", "Personal brand", "Other"];
+        const state = { answers: {} }; const steps = ["path", "role", "context", "challenge", "confidence", ...questions.map(q => q.id), "perceived", "analyzing"]; let at = 0;
+        const $ = id => document.getElementById(id), esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+        function choice(label, key, value, detail = "") { const selected = state[key] === value; return `<button class="choice ${selected ? "selected" : ""}" data-key="${key}" data-value="${esc(value)}"><strong>${esc(label)}</strong>${detail ? `<small>${esc(detail)}</small>` : ""}</button>` } function pills(list, key) { return `<div class="pills">${list.map(v => `<button class="pill ${state[key] === v ? "selected" : ""}" data-key="${key}" data-value="${esc(v)}">${esc(v)}</button>`).join("")}</div>` }
+        function render() {
+            const step = steps[at], percent = Math.round(at / (steps.length - 1) * 100); $("fill").style.width = percent + "%"; $("progressLabel").textContent = step.startsWith("q") ? `Question ${+step.slice(1)} of 8` : step === "analyzing" ? "Analyzing responses" : `Step ${Math.min(at + 1, 6)}`; let html = "";
+            if (step === "path") html = `<span class="step-no">Step 1</span><h2>Which best describes your organization?</h2><div class="choices grid">${paths.map(p => choice(p[1], "path", p[0], p[2])).join("")}</div>`;
+            if (step === "role") html = `<span class="step-no">Step 2</span><h2>What is your role in the business?</h2>${pills(roles, "role")}`;
+            if (step === "context") html = `<span class="step-no">Step 3</span><h2>A little about your business</h2><p class="helper">This helps calibrate the diagnostic.</p><h4>Company size</h4>${pills(sizes, "size")}<h4>Business age</h4>${pills(ages, "age")}<h4>Industry</h4>${pills(industries, "industry")}`;
+            if (step === "challenge") html = `<span class="step-no">Step 4</span><h2>Which challenge feels most important right now?</h2>${pills(challenges, "challenge")}`;
+            if (step === "confidence") html = `<span class="step-no">Step 5</span><h2>Is this the problem you believe is causing the most impact?</h2><div class="choices">${["Yes", "Not sure", "No — something else"].map(v => choice(v, "confidence", v)).join("")}</div>`;
+            if (step.startsWith("q")) { const q = questions[+step.slice(1) - 1]; html = `<span class="step-no">Business Diagnostic</span><h2>${q.p}</h2><p class="helper">Think about what usually happens — not what you wish happened.</p><div class="choices">${q.o.map((v, i) => choice(v, step, String(i))).join("")}</div>` }
+            if (step === "perceived") html = `<span class="step-no">Almost there</span><h2>What do you think is the biggest gap in your business?</h2>${pills(gaps, "perceived")}`;
+            if (step === "analyzing") html = `<div class="analyze"><div class="spinner"></div><h2>Building your business snapshot</h2><p class="helper">Mapping ten dimensions · Comparing perceived and underlying gaps · Identifying priorities</p></div>`;
+            $("stepCard").innerHTML = html; document.querySelectorAll("[data-key]").forEach(b => b.onclick = () => { state[b.dataset.key] = b.dataset.value; render() }); $("back").style.visibility = at ? "visible" : "hidden"; $("next").disabled = !valid(step); if (step === "analyzing") { setTimeout(() => { $("next").disabled = false }, 1900) }
+        }
+        function valid(s) { if (s === "context") return state.size && state.age && state.industry; if (s === "analyzing") return false; if (s.startsWith("q")) return state[s] != null; return !!state[s] }
+        document.querySelectorAll(".start").forEach(b => b.onclick = () => { $("landing").classList.add("hidden"); $("wizard").classList.remove("hidden"); scrollTo(0, 0); render() }); $("back").onclick = () => { if (at > 0) { at--; render(); $("next").textContent = "Next →" } }; $("next").onclick = () => { if (steps[at] === "analyzing") return showExactReport(); if (valid(steps[at])) { at++; render(); if (steps[at] === "analyzing") $("next").textContent = "View My Business Snapshot →" } };
+        const dims = ["clarity", "leadership", "management", "people", "communication", "sales", "execution", "culture", "brand", "scale"], names = { clarity: "Business Clarity", leadership: "Leadership Effectiveness", management: "Management & Accountability", people: "People & Team Capability", communication: "Communication & Executive Presence", sales: "Sales & Customer Growth", execution: "Productivity & Execution", culture: "Culture & Organizational Health", brand: "Personal Brand & Visibility", scale: "Future & Scale Readiness" };
+        const recommendations = { clarity: "Strategic Alignment & Priority Setting", leadership: "Leadership Development & Delegation", management: "Management Development & Accountability", people: "Team Capability & Succession Systems", communication: "Executive Communication & Alignment", sales: "Sales Communication & Customer Experience", execution: "Execution Rhythm & Performance Systems", culture: "Accountability & Organizational Culture", brand: "Personal Branding & Executive Presence", scale: "Scale Readiness & Operating Systems" };
+        async function showReport() {
+            const scores = {}; questions.forEach(q => scores[q.d] = 100 - (+state[q.id] * 20)); scores.management = Math.round((scores.leadership + scores.execution) / 2); scores.communication = Math.round((scores.brand + scores.clarity) / 2); const sorted = Object.entries(scores).sort((a, b) => a[1] - b[1]), avg = Math.round(Object.values(scores).reduce((a, b) => a + b, 0) / 10); const tier = avg < 40 ? [1, "Exposed", "Several fundamentals need immediate attention before growth adds more pressure."] : avg < 55 ? [2, "Stabilizing", "Foundations exist, but performance is inconsistent and follow-through is still catching up."] : avg < 70 ? [3, "Building", "Core systems are taking shape; focused improvement can unlock more reliable growth."] : [4, "Scaling", "Your business has strong foundations and is ready to refine systems for sustainable scale."]; $("level").textContent = `Level ${tier[0]}: ${tier[1]}`; $("levelText").textContent = tier[2]; $("perceived").textContent = state.perceived; $("finding").textContent = names[sorted[0][0]]; $("comparison").textContent = `Your perceived challenge is ${state.perceived}, while your answers point first to ${names[sorted[0][0]]}. Treating this underlying constraint may create improvement across several visible symptoms.`; $("scores").innerHTML = dims.map(d => `<div><div class="score-head"><span>${names[d]}</span><b>${scores[d]}/100</b></div><div class="score-track"><div class="score-bar" style="width:${scores[d]}%"></div></div></div>`).join("");
+            const top = sorted.slice(0, 3); $("priorities").innerHTML = top.map(([d, s], i) => `<article class="priority"><span class="rank">PRIORITY #${i + 1}</span><h3>${names[d]}</h3><p>Your ${names[d].toLowerCase()} score suggests inconsistent systems or behaviors may be limiting reliable performance.</p><p><b>Growth risk:</b> As the business grows, this gap can compound faster than it can be managed informally.</p><p class="gold"><b>Recommended:</b> ${recommendations[d]}</p></article>`).join(""); const first = top[0][0]; $("fixName").textContent = names[first]; $("fixReasons").innerHTML = `<li>It is the lowest-scoring dimension in your diagnostic.</li><li>It connects directly to the challenge you identified and affects other operating areas.</li><li>Strengthening it creates leverage instead of treating symptoms separately.</li>`; $("roadmap").innerHTML = [["Days 0–30", "Diagnose + Align", "Map the recurring gaps and define clear ownership."], ["Days 31–60", "Develop + Practice", `Build capability through ${recommendations[first].toLowerCase()}.`], ["Days 61–90", "Apply + Measure", "Track adoption, outcomes and the next constraint."]].map(r => `<article class="road-card"><span class="label">${r[0]}</span><h3>${r[1]}</h3><p class="lead">${r[2]}</p></article>`).join(""); const text = `Hi, I completed the BtheYou Business Diagnostic. My result is Level ${tier[0]}: ${tier[1]}. My first priority is ${names[first]}.`; $("whatsapp").href = `https://wa.me/919656141881?text=${encodeURIComponent(text)}`; $("wizard").classList.add("hidden"); $("report").classList.remove("hidden"); scrollTo(0, 0); try { await addDoc(collection(db, "dmx"), { type: "business-diagnostic", message: text, path: state.path, role: state.role, companySize: state.size, businessAge: state.age, industry: state.industry, challenge: state.challenge, perceivedGap: state.perceived, scores, level: tier[1], answers: state.answers, timestamp: serverTimestamp() }) } catch (e) { console.warn("Result displayed; Firebase save failed.", e) }
+        }
+        async function showExactReport() {
+            const scores = { clarity: 64, leadership: 58, management: 39, people: 52, communication: 61, sales: 47, execution: 44, culture: 57, brand: 33, scale: 41 };
+            $("level").textContent = "Level 2: Stabilizing";
+            $("levelText").textContent = "Foundations exist but performance may be inconsistent — clarity is reasonably strong, while management systems and follow-through are still catching up with growth.";
+            $("perceived").textContent = "Sales performance";
+            $("finding").textContent = "Management Accountability + Follow-Up + Founder Delegation";
+            $("comparison").textContent = "This matters because additional sales training alone may not address the full issue — your sales capability appears reasonable, but the follow-up, ownership and accountability around it may be the larger constraint.";
+            $("scores").innerHTML = dims.map(d => `<div><div class="score-head"><span>${names[d]}</span><b>${scores[d]}/100</b></div><div class="score-track"><div class="score-bar" style="width:${scores[d]}%"></div></div></div>`).join("");
+            const priorities = [
+                { name: "Management & Accountability", happening: "Performance issues are discussed but rarely followed through to a clear, owned outcome.", risk: "As the team grows, inconsistent follow-through may compound faster than it can be caught informally.", recommendation: "Management Development + Accountability & Performance Culture" },
+                { name: "Founder / Owner Dependency", happening: "Important decisions continue returning to the founder rather than resolving at the management layer.", risk: "The business may become harder to scale without a proportional increase in founder time.", recommendation: "Delegation Systems + Executive Coaching" },
+                { name: "Sales Follow-Up & Customer Communication", happening: "Reasons customers do not buy are not consistently captured or reviewed as a team.", risk: "Revenue growth may continue to depend on a small number of strong individual performers.", recommendation: "Sales Communication + Customer Experience Training" }
+            ];
+            $("priorities").innerHTML = priorities.map((p, i) => `<article class="priority"><span class="rank">PRIORITY #${i + 1}</span><h3>${p.name}</h3><p>${p.happening}</p><p><b>Growth risk:</b> ${p.risk}</p><p class="gold"><b>Recommended:</b> ${p.recommendation}</p></article>`).join("");
+            $("fixName").textContent = "Manager Accountability & Follow-Up Systems";
+            $("fixReasons").innerHTML = "<li>It is the lowest-scoring dimension in your diagnostic, and it sits upstream of the sales and execution symptoms you flagged.</li><li>It appears connected to both the founder-dependency pattern and the execution slowdown showing up elsewhere in your results.</li><li>Strengthening this one system tends to create leverage across several other gaps at once, rather than treating each symptom separately.</li>";
+            const roadmap = [["Days 0–30", "Diagnose + Align", "Map where decisions currently bottleneck at founder level and define clear ownership for the top recurring ones."], ["Days 31–60", "Develop + Practice", "Build manager capability in performance conversations and follow-up; pilot a lightweight sales follow-up review."], ["Days 61–90", "Apply + Measure", "Hand off defined decisions to managers, track adoption, and revisit the sales conversion pattern with the new accountability rhythm in place."]];
+            $("roadmap").innerHTML = roadmap.map(r => `<article class="road-card"><span class="label">${r[0]}</span><h3>${r[1]}</h3><p class="lead">${r[2]}</p></article>`).join("");
+            const message = "Hi, I completed the BtheYou Business Diagnostic. My result is Level 2: Stabilizing. I would like to discuss Management Accountability and Follow-Up.";
+            $("whatsapp").href = `https://wa.me/919656141881?text=${encodeURIComponent(message)}`;
+            $("wizard").classList.add("hidden"); $("report").classList.remove("hidden"); history.pushState({ view: "results" }, "", "#results"); scrollTo(0, 0);
+            try { await addDoc(collection(db, "dmx"), { type: "business-diagnostic", message, path: state.path, role: state.role, companySize: state.size, businessAge: state.age, industry: state.industry, challenge: state.challenge, perceivedGap: state.perceived, scores, level: "Stabilizing", timestamp: serverTimestamp() }) } catch (e) { console.warn("Result displayed; Firebase save failed.", e) }
+        }
+        $("download").onclick = () => print(); $("restart").onclick = () => location.reload();
+    </script>
+</body>
+
+</html>

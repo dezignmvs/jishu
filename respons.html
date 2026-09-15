@@ -1400,6 +1400,11 @@
 
           const avatarLetter = msg.name ? msg.name.trim().charAt(0) : "?";
           const formattedDate = formatTime(msg.timestamp);
+          const whatsappNumber = String(msg.whatsappNumber || `${msg.countryCode || ""}${msg.phone || ""}`).replace(/\D/g, "");
+          const replyText = `Hi ${msg.name || "there"}, thank you for contacting Jishad Musthafa. I'm replying regarding your message: "${msg.message || ""}"`;
+          const whatsappUrl = whatsappNumber
+            ? `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(replyText)}`
+            : "";
 
           card.innerHTML = `
           <div class="message-header">
@@ -1414,6 +1419,7 @@
                   </svg>
                   ${escapeHtml(msg.email || "No Email")}
                 </a>
+                ${whatsappNumber ? `<a href="tel:+${whatsappNumber}" class="phone-link">+${escapeHtml(whatsappNumber)}</a>` : '<span class="phone-unavailable">No WhatsApp number</span>'}
               </div>
             </div>
             <div class="message-meta">
@@ -1422,6 +1428,10 @@
           </div>
           <div class="message-body">${escapeHtml(msg.message || "")}</div>
           <div class="message-actions">
+            ${whatsappUrl ? `<a class="reply-btn" href="${escapeHtml(whatsappUrl)}" target="_blank" rel="noopener noreferrer" aria-label="Reply to ${escapeHtml(msg.name || "contact")} on WhatsApp">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.198.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.297-.497.1-.198.05-.371-.025-.52-.074-.149-.669-1.612-.916-2.208-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479s1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.262.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347M12.004 2a9.84 9.84 0 0 0-8.39 14.984L2.05 22l5.151-1.351A9.91 9.91 0 1 0 12.004 2"/></svg>
+              Reply on WhatsApp
+            </a>` : ''}
             <button class="delete-btn" data-id="${msg.id}">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="3 6 5 6 21 6"></polyline>
@@ -1487,7 +1497,8 @@
           const name = (msg.name || "").toLowerCase();
           const email = (msg.email || "").toLowerCase();
           const body = (msg.message || "").toLowerCase();
-          return name.includes(searchTerm) || email.includes(searchTerm) || body.includes(searchTerm);
+          const phone = String(msg.whatsappNumber || msg.phone || "").toLowerCase();
+          return name.includes(searchTerm) || email.includes(searchTerm) || body.includes(searchTerm) || phone.includes(searchTerm);
         });
 
         renderMessages(filtered);

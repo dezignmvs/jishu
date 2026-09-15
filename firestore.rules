@@ -8,6 +8,12 @@ service cloud.firestore {
       allow create: if true; // Anyone can submit contact messages from the website
       allow read, delete: if true; // Admin console can view and delete messages
     }
+
+    // Speaking Potential Snapshot submissions
+    match /assessments/{document} {
+      allow create: if true;
+      allow read, delete: if true;
+    }
     
     // Program courses and workshops database
     match /programData/{document} {

@@ -23,6 +23,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const modalSuccessState = document.getElementById('modalSuccessState');
   const closeSuccessBtn = document.getElementById('closeSuccessBtn');
   const submitFormBtn = document.getElementById('submitFormBtn');
+  const testChooserBtn = document.getElementById('testChooserBtn');
+  const testChooserModal = document.getElementById('testChooserModal');
+  const testChooserClose = document.getElementById('testChooserClose');
   
   // Triggers to open the modal
   const openModalTriggers = [
@@ -40,6 +43,28 @@ document.addEventListener('DOMContentLoaded', () => {
   const serviceError = document.getElementById('serviceError');
 
   // --- Modal Open/Close Logic ---
+
+  const openTestChooser = () => {
+    testChooserModal.classList.add('active');
+    testChooserModal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => testChooserClose.focus(), 100);
+  };
+
+  const closeTestChooser = () => {
+    testChooserModal.classList.remove('active');
+    testChooserModal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    testChooserBtn.focus();
+  };
+
+  if (testChooserBtn && testChooserModal && testChooserClose) {
+    testChooserBtn.addEventListener('click', openTestChooser);
+    testChooserClose.addEventListener('click', closeTestChooser);
+    testChooserModal.addEventListener('click', (event) => {
+      if (event.target === testChooserModal) closeTestChooser();
+    });
+  }
 
   const openModal = (defaultService = '') => {
     bookingModal.classList.add('active');
@@ -98,6 +123,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Close modal with ESC key
   window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && testChooserModal?.classList.contains('active')) {
+      closeTestChooser();
+      return;
+    }
     if (e.key === 'Escape' && bookingModal.classList.contains('active')) {
       closeModal();
     }
@@ -229,6 +258,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const insightsForm = document.getElementById('insightsContactForm');
   const contactName = document.getElementById('contactName');
   const contactEmail = document.getElementById('contactEmail');
+  const contactCountryCode = document.getElementById('contactCountryCode');
+  const contactPhone = document.getElementById('contactPhone');
   const contactMessage = document.getElementById('contactMessage');
   const contactFormInputs = document.getElementById('contactFormInputs');
   const contactFormSuccess = document.getElementById('contactFormSuccess');
@@ -241,7 +272,7 @@ document.addEventListener('DOMContentLoaded', () => {
       let isValid = true;
       
       // Simple visual check for empty fields
-      [contactName, contactEmail, contactMessage].forEach(input => {
+      [contactName, contactEmail, contactPhone, contactMessage].forEach(input => {
         if (!input.value.trim()) {
           input.style.borderColor = '#e03131';
           isValid = false;
@@ -249,6 +280,13 @@ document.addEventListener('DOMContentLoaded', () => {
           input.style.borderColor = 'transparent';
         }
       });
+
+      const localPhone = contactPhone.value.replace(/\D/g, '').replace(/^0+/, '');
+      const whatsappNumber = `${contactCountryCode.value.replace(/\D/g, '')}${localPhone}`;
+      if (localPhone.length < 6 || whatsappNumber.length > 15) {
+        contactPhone.style.borderColor = '#e03131';
+        isValid = false;
+      }
 
       if (!isValid) return;
 
@@ -261,6 +299,9 @@ document.addEventListener('DOMContentLoaded', () => {
       addDoc(collection(db, "dmx"), {
         name: contactName.value.trim(),
         email: contactEmail.value.trim(),
+        countryCode: contactCountryCode.value,
+        phone: localPhone,
+        whatsappNumber,
         message: contactMessage.value.trim(),
         timestamp: serverTimestamp()
       })
@@ -277,7 +318,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Clear red border on input typing
-    [contactName, contactEmail, contactMessage].forEach(input => {
+    [contactName, contactEmail, contactPhone, contactMessage].forEach(input => {
       input.addEventListener('input', () => {
         input.style.borderColor = 'transparent';
       });
